@@ -12,6 +12,8 @@ namespace gfx
 		RENDER_DRAW_RECT,
 		RENDER_FILL_RECT,
 		LOAD_TEXTURE,
+		LOAD_FONT,
+		LOAD_TEXT,
 	};
 
 }

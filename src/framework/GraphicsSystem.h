@@ -48,8 +48,8 @@ namespace gfx {
 	{
 		int x;
 		int y;
-		int h;
 		int w;
+		int h;
 
 	};
 
@@ -75,18 +75,63 @@ namespace gfx {
 		Texture(SDL_Texture* texture) : m_texture(texture)
 		{
 		}
-
-		void setTexture(SDL_Texture* texture)
-		{
-			m_texture = texture;
-		}
-
+		
 		void freeTexture()
 		{
 			SDL_DestroyTexture(m_texture);
 		}
 
+		void setTexture(SDL_Texture* texture)
+		{
+			freeTexture();
+			m_texture = texture;
+		}
+		
+		
+		~Texture()
+		{
+			freeTexture();
+		}
+
     };
+	
+	
+	class Font
+	{
+		TTF_Font* m_font;
+		
+	public:
+		Font() : m_font(nullptr)
+		{
+		}
+		
+		Font(TTF_Font* font) : m_font(font)
+		{
+		}
+		
+		void freeFont()
+		{
+			TTF_CloseFont(m_font);
+		}
+		
+		~Font()
+		{
+			freeFont();
+		}
+		
+		
+		TTF_Font* getFont()
+		{
+			return m_font;
+		}
+		
+		void setFont(TTF_Font* font)
+		{
+			freeFont();
+			m_font = font;
+		}
+		
+	};
 
 
 
@@ -235,6 +280,22 @@ namespace gfx {
 		* @param y The Y position of the texture once rendered
 		*/
 		void renderTexture(Texture* texture, Rect* source, Rect* dest);
+		
+		
+		/* Loads a font from file and size
+		 *
+		 * @param filepath The filepath to the font file (.ttf)
+		 * @param psize The point size at which to render the font
+		 */
+		Font* loadFont(std::string filepath, int psize);
+		
+		/* Loads a texture of text of the given font and color
+		 *
+		 * @param text The text to render
+		 * @param font The font to render the text in
+		 * @param color The color to render the text in
+		 */
+		Texture* loadText(std::string text, Font* font, Color color);
 	};
 
 }

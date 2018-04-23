@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(FrameworkDefault)
+project(ShooterGame)
 
-set(PROGRAM_NAME "FrameworkDefault")
+set(PROGRAM_NAME "Shooter Game")
 
 set (CMAKE_CXX_STANDARD 14) #set C++ version to C++14
 

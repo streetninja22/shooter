@@ -21,6 +21,40 @@ namespace gfx
 		
 		virtual GraphicsEventType getGraphicsEventType() { return GraphicsEventType::LOAD_TEXTURE; }
 	};
+	
+	class LoadFontEvent : public GraphicsEvent
+	{
+		std::string m_filepath;
+		int m_psize;
+		
+	public:
+		LoadFontEvent(std::string filepath, int psize) : m_filepath(filepath), m_psize(psize)
+		{
+		}
+		
+		std::string getFilepath() { return m_filepath; }
+		int getPsize() { return m_psize; }
+		
+		virtual GraphicsEventType getGraphicsEventType() override { return GraphicsEventType::LOAD_FONT; }
+	};
+	
+	class LoadTextEvent : public GraphicsEvent
+	{
+		std::string m_text;
+		Font* m_font;
+		Color m_color;
+		
+	public:
+		LoadTextEvent(std::string text, Font* font, Color color) : m_text(text), m_font(font), m_color(color)
+		{
+		}
+		
+		std::string getText() { return m_text; }
+		Font* getFont() { return m_font; }
+		Color getColor() { return m_color; }
+		
+		virtual GraphicsEventType getGraphicsEventType() override { return GraphicsEventType::LOAD_TEXT; }
+	};
 
 	//An event which calls for the Graphics System to render an image
 	class RenderImageEvent : public RenderEvent
@@ -124,6 +158,20 @@ namespace gfx
 		Texture* getTexture() { return m_texture; }
 
 		virtual GraphicsEventType getGraphicsEventType() { return GraphicsEventType::LOAD_TEXTURE; }
+	};
+	
+	class LoadFontReturnType : public GraphicsEventReturnType
+	{
+		Font* m_font;
+		
+	public:
+		LoadFontReturnType(Font* font) : GraphicsEventReturnType(), m_font(font)
+		{
+		}
+		
+		Font* getFont() { return m_font; }
+		
+		virtual GraphicsEventType getGraphicsEventType() override { return GraphicsEventType::LOAD_FONT; }
 	};
 
 }

@@ -34,6 +34,12 @@ namespace gfx
 		return r1;
 	}
 
+	
+	SDL_Color SDLColorFromColor(Color color)
+	{
+		return {color.red, color.green, color.blue, color.alpha};
+	}
+	
 
 	/* In initializing the system, also creates a window and a render for window
 	*
@@ -48,6 +54,7 @@ namespace gfx
 	{
 		SDL_Init(SDL_INIT_VIDEO);
 		IMG_Init(IMG_INIT_JPG & IMG_INIT_PNG);
+		TTF_Init();
 
 		m_window = SDL_CreateWindow(name.c_str(), x, y, w, h, SDL_WINDOW_SHOWN);
 		if (m_window == nullptr)
@@ -115,6 +122,23 @@ namespace gfx
 					return new LoadTextureReturnType(texture);
 				}
 					
+			case GraphicsEventType::LOAD_FONT:
+				{
+					LoadFontEvent* loadEvent = dynamic_cast<LoadFontEvent*>(evnt);
+					
+					Font* font = loadFont(loadEvent->getFilepath(), loadEvent->getPsize());
+					
+					return new LoadFontReturnType(font);
+				}
+					
+			case GraphicsEventType::LOAD_TEXT:
+				{
+					LoadTextEvent* loadEvent = dynamic_cast<LoadTextEvent*>(evnt);
+					
+					Texture* text = loadText(loadEvent->getText(), loadEvent->getFont(), loadEvent->getColor());
+					
+					return new LoadTextureReturnType(text);
+				}
 			}
 
 		}
@@ -268,4 +292,17 @@ namespace gfx
 		delete destRect;
 	}
 
+	
+	
+	Font* GraphicsSystem::loadFont(std::string filepath, int psize)
+	{
+		return new Font(TTF_OpenFont(filepath.c_str(), psize));
+	}
+	
+	Texture* GraphicsSystem::loadText(std::string text, Font* font, Color color)
+	{
+		SDL_Surface* surface = TTF_RenderText_Solid(font->getFont(), text.c_str(), SDLColorFromColor(color));
+		
+		return new Texture(SDL_CreateTextureFromSurface(m_renderer, surface));
+	}
 }

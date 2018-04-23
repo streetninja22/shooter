@@ -1,7 +1,7 @@
 #pragma once
 
 #include "System.h"
-#include <SDL2_mixer/SDL_mixer.h>
+#include "includeSDL.h"
 #include <string>
 #include "Event.h"
 #include "Exception.h"
