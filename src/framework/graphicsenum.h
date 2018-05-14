@@ -9,6 +9,7 @@ namespace gfx
 	{
 		DEFAULT,
 		RENDER_IMAGE,
+		RENDER_ROTATE_IMAGE,
 		RENDER_DRAW_RECT,
 		RENDER_FILL_RECT,
 		LOAD_TEXTURE,
@@ -16,4 +17,12 @@ namespace gfx
 		LOAD_TEXT,
 	};
 
+	
+	
+	enum RenderFlipMode
+	{
+		FLIP_NONE,
+		FLIP_HORIZONTAL,
+		FLIP_VERTICAL,
+	};
 }

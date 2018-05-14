@@ -90,6 +90,46 @@ namespace gfx
 		Texture* getTexture() { return m_texture; }
 		virtual GraphicsEventType getGraphicsEventType() override { return GraphicsEventType::RENDER_IMAGE; }
 	};
+	
+	
+	//An event which calls for the Graphics System to render an image
+	class RenderRotateImageEvent : public RenderImageEvent
+	{
+		double m_angle;
+		Pair* m_center;
+		RenderFlipMode m_flipMode;
+		
+	public:
+		RenderRotateImageEvent()
+		{
+			
+		}
+		
+		/* Creates a RenderImageEvent
+			*
+			* @param texture the Texture to render
+			* @param srcRect The source rectangle which determines what part of the texture will be rendered
+			* @param dstRect The destination rectangle, which determins where on the screen the texture will be rendered
+			*/
+		RenderRotateImageEvent(Texture* texture, Rect* srcRect, Rect* dstRect, double angle, Pair* center, RenderFlipMode flipMode = RenderFlipMode::FLIP_NONE) : RenderImageEvent(texture, srcRect, dstRect), m_angle(angle), m_center(center), m_flipMode(flipMode)
+		{
+		}
+		
+		virtual ~RenderRotateImageEvent() override
+		{
+			delete m_center;
+		}
+		
+		Pair* getCenter() { return m_center; }
+		double getAngle() { return m_angle; }
+		RenderFlipMode getFlipMode() { return m_flipMode; }
+		
+		virtual GraphicsEventType getGraphicsEventType() override { return GraphicsEventType::RENDER_ROTATE_IMAGE; }
+	};
+	
+	
+	
+	
 
 	class RenderDrawRectEvent : public RenderEvent
 	{

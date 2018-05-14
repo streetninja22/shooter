@@ -34,6 +34,18 @@ namespace gfx
 		return r1;
 	}
 
+	SDL_Point* SDLPointFromPair(Pair* p1)
+	{
+		if (p1 == NULL)
+			return NULL;
+		
+		SDL_Point* p2 = new SDL_Point();
+		
+		p2->x = p1->x;
+		p2->y = p1->y;
+		
+		return p2;
+	}
 	
 	SDL_Color SDLColorFromColor(Color color)
 	{
@@ -93,6 +105,15 @@ namespace gfx
 					renderTexture(renderEvent->getTexture(), renderEvent->getSrcRect(), renderEvent->getDstRect());
 
 					break; 
+				}
+					
+			case GraphicsEventType::RENDER_ROTATE_IMAGE:
+				{
+					RenderRotateImageEvent* renderEvent = dynamic_cast<RenderRotateImageEvent*>(evnt);
+					
+					renderRotateTexture(renderEvent->getTexture(), renderEvent->getSrcRect(), renderEvent->getDstRect(), renderEvent->getAngle(), renderEvent->getCenter(), renderEvent->getFlipMode());
+					
+					break;
 				}
 					
 			case GraphicsEventType::RENDER_DRAW_RECT:
@@ -292,6 +313,18 @@ namespace gfx
 		delete destRect;
 	}
 
+	
+	void GraphicsSystem::renderRotateTexture(Texture* texture, Rect* source, Rect* dest, double angle, Pair* center, RenderFlipMode flipMode)
+	{
+		SDL_Rect* sourceRect = SDLRectFromRect(source);
+		SDL_Rect* destRect = SDLRectFromRect(dest);
+		SDL_Point* SDLCenter = SDLPointFromPair(center);
+		
+		SDL_RenderCopyEx(m_renderer, texture->getTexture(), sourceRect, destRect, angle, SDLCenter, static_cast<SDL_RendererFlip>(flipMode));
+		
+		delete sourceRect;
+		delete destRect;
+	}
 	
 	
 	Font* GraphicsSystem::loadFont(std::string filepath, int psize)

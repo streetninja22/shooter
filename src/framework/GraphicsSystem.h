@@ -52,6 +52,12 @@ namespace gfx {
 		int h;
 
 	};
+	
+	struct Pair
+	{
+		int x;
+		int y;
+	};
 
 	SDL_Rect* SDLRectFromRect(SDL_Rect* r1, Rect* r2);
 
@@ -274,12 +280,22 @@ namespace gfx {
 		/* Renders the supplied texture at the given position and size
 		*
 		* @param texture The texture to render
-		* @param w The width of the texture once rendered
-		* @param h The heigth of the texture once rendererd
-		* @param x The X position of the texture once rendered
-		* @param y The Y position of the texture once rendered
+		* @param source The source rectangle of the texture, what to render from the texture given
+		* @param dest Where to render the texture on the screen
 		*/
 		void renderTexture(Texture* texture, Rect* source, Rect* dest);
+		
+		
+		/* Renders the supplied texture at the given position and size, with the given rotation and flip
+		 *
+		 * @param texture The texture to render
+		 * @param source The source rectangle of the texture, what to render from the texture given
+		 * @param dest Where to render the texture on the screen
+		 * @param angle The angle to rotate the image by
+		 * @param center The center of rotation
+		 * @param flipMode How to flip the image
+		 */
+		void renderRotateTexture(Texture* texture, Rect* source, Rect* dest, double angle, Pair* center, RenderFlipMode flipMode = RenderFlipMode::FLIP_NONE);
 		
 		
 		/* Loads a font from file and size
