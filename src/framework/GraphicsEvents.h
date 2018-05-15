@@ -182,6 +182,30 @@ namespace gfx
 	};
 
 	
+	
+	
+	
+	class SetViewportEvent : public GraphicsEvent
+	{
+		Rect* m_area;
+		
+	public:
+		SetViewportEvent(Rect* area) : m_area(area)
+		{
+		}
+		
+		~SetViewportEvent()
+		{
+			delete m_area;
+		}
+		
+		
+		Rect* getArea() { return m_area; }
+		
+		virtual GraphicsEventType getGraphicsEventType() override { return GraphicsEventType::SET_VIEWPORT; }
+	};
+	
+	
 
 
 
@@ -199,6 +223,13 @@ namespace gfx
 
 		virtual GraphicsEventType getGraphicsEventType() { return GraphicsEventType::LOAD_TEXTURE; }
 	};
+	
+	
+	
+	
+	
+	
+	
 	
 	class LoadFontReturnType : public GraphicsEventReturnType
 	{

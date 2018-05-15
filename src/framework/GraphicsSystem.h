@@ -298,6 +298,13 @@ namespace gfx {
 		void renderRotateTexture(Texture* texture, Rect* source, Rect* dest, double angle, Pair* center, RenderFlipMode flipMode = RenderFlipMode::FLIP_NONE);
 		
 		
+		/* Sets the viewport to the given area on the screen
+		 *
+		 * @param area The area of the viewport on the screen. Set to NULL for entire screen
+		 */
+		void setViewport(Rect* area);
+		
+		
 		/* Loads a font from file and size
 		 *
 		 * @param filepath The filepath to the font file (.ttf)

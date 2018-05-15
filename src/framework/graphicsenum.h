@@ -15,6 +15,7 @@ namespace gfx
 		LOAD_TEXTURE,
 		LOAD_FONT,
 		LOAD_TEXT,
+		SET_VIEWPORT,
 	};
 
 	

@@ -160,6 +160,13 @@ namespace gfx
 					
 					return new LoadTextureReturnType(text);
 				}
+					
+			case GraphicsEventType::SET_VIEWPORT:
+				{
+					SetViewportEvent* viewEvent = dynamic_cast<SetViewportEvent*>(evnt);
+					
+					setViewport(viewEvent->getArea());
+				}
 			}
 
 		}
@@ -325,6 +332,19 @@ namespace gfx
 		delete sourceRect;
 		delete destRect;
 	}
+	
+	
+	
+	
+	
+	void GraphicsSystem::setViewport(Rect* area)
+	{
+		SDL_RenderSetViewport(m_renderer, SDLRectFromRect(area));
+	}
+	
+	
+	
+	
 	
 	
 	Font* GraphicsSystem::loadFont(std::string filepath, int psize)
