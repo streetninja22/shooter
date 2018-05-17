@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(ShooterGame)
 
-set(PROGRAM_NAME "Shooter Game")
+set(PROGRAM_NAME "ShooterGame")
 
 set (CMAKE_CXX_STANDARD 14) #set C++ version to C++14
 
