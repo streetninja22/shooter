@@ -1,106 +1,63 @@
-#include <iostream>
-#include <boost/filesystem.hpp>
-#include "framework/assets.h"
 #include "framework/InputSystem.h"
-#include "framework/Event.h"
-#include "framework/includeSDL.h"
 #include "framework/GraphicsSystem.h"
 #include "framework/GraphicsEvents.h"
 #include "framework/SoundSystem.h"
 #include "framework/soundevents.h"
+#include "framework/functions.h"
+
+#include "GameSystem.h"
 
 
-//NOTE: in its current state, main.cpp is entirely used for testing
+#include <iostream>
 
 
+//TODO: get these values out of macros, perhaps create an options file or something
 
-class GameSystem : public System
-{
+//default 480p
+#define SCREEN_WIDTH 620
+#define SCREEN_HEIGHT 480
 
-	sound::Chunk* m_soundEffect;
-	
-public:
-	GameSystem(evnt::EventBus* bus) : System(bus)
-	{
-		sound::LoadChunkReturnType* returned = dynamic_cast<sound::LoadChunkReturnType*>(bus->fireEventNow(new sound::LoadChunkEvent(file::getResourceDirectory("sound/death.mp3"))));
-		
-		m_soundEffect = returned->getChunk();
-	}
-	
-	
-	
-	EventReturnType* eventFired(Event* event) override
-	{
-		using namespace inpt;
-		if (event->getEventType() == EventType::INPUT)
-		{
-			InputEvent* inputEvent = dynamic_cast<InputEvent*>(event);
-			if (inputEvent->getInputType() == InputEventType::KEYBOARD)
-			{
-				KeyboardEvent* keyEvent = dynamic_cast<KeyboardEvent*>(inputEvent);
-				if (keyEvent->getType() == KeyEventType::KEYDOWN)
-				{
-					switch (keyEvent->getKeyCode())
-					{
-						case KeyCode::KEYCODE_SPACE:
-						{
-							addEvent(new sound::ToggleMusicEvent());
-							
-							break;
-						}
-							
-						case KeyCode::KEYCODE_P:
-						{
-							addEvent(new sound::PlayChunkEvent(m_soundEffect));
-							
-							break;
-						}
-					}
-				}
-			}
-		}
-		return nullptr;
-	}
-		
-};
-
+#define PROJECT_NAME "Shooter Game"
+#define MS_PER_FRAME 16
 
 
 
 int main(int argc, char** argv)
 {
-	evnt::EventBus* bus = new evnt::EventBus();
+	//initialize core systems
+	evnt::EventBus* mainEventBus = new evnt::EventBus();
 	
-	inpt::InputSystem input(bus);
-
-	gfx::GraphicsSystem graphics(bus, "Test", 0, 80, 640, 480);
+	//around the middle of a 1080p monitor sounds about right for placement
+	gfx::GraphicsSystem* gfxSystem = new gfx::GraphicsSystem(mainEventBus, PROJECT_NAME, 1920/2, 1080/2, SCREEN_WIDTH, SCREEN_HEIGHT);
 	
-	sound::SoundSystem sound(bus);
-
-	evnt::EventReturnType* returned = bus->fireEventNow(new gfx::LoadTextureEvent(file::getResourceDirectory("gfx/cryofreeze.jpg")));
-
-	gfx::Texture* texture = static_cast<gfx::LoadTextureReturnType*>(returned)->getTexture();
+	sound::SoundSystem* soundSystem = new sound::SoundSystem(mainEventBus);
 	
-	GameSystem gameSystem(bus);
+	inpt::InputSystem* inputSystem = new inpt::InputSystem(mainEventBus);
 	
+	shooter::GameSystem* gameSystem = new shooter::GameSystem(mainEventBus);
 	
-	sound::Music* music = static_cast<sound::LoadMusicReturnType*>(bus->fireEventNow(new sound::LoadMusicEvent(file::getResourceDirectory("sound/music.wav"))))->getMusic();
-	
-	bus->addEvent(new sound::PlayMusicEvent(music));
 	
 	while (true)
 	{
-		bus->update();
+		long start = getTicks();
 		
-		input.updateInput();
+		inputSystem->updateInput();
+		gameSystem->update();
+		gfxSystem->update();
+		soundSystem->update();
 		
-		graphics.update();
-
-		gfx::RenderImageEvent* event = new gfx::RenderImageEvent(texture, NULL, NULL);
-
-		bus->addEvent(event);
+		long time = start + MS_PER_FRAME - getTicks();
 		
+		delay(time > 0 ? time : 0);
 	}
+	
+	//clean up
+	
+	delete gameSystem;
+	delete inputSystem;
+	delete soundSystem;
+	delete gfxSystem;
+	delete mainEventBus;
 	
 	return 0;
 }
