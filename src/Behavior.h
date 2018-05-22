@@ -1,9 +1,10 @@
 #pragma once
 
+#include <stdint.h>
 
 class Behavior
 {
-	Uint32 m_clock;
+	uint32_t m_clock;
 	
 public:
 	Behavior() : m_clock(0)
@@ -11,9 +12,9 @@ public:
 		
 	}
 	
-	virtual void stepBehavior(Uint32 timeStep=1);
+	virtual void stepBehavior(uint32_t timeStep=1);
 	
-	void update(Uint32 timeStep=1)
+	void update(uint32_t timeStep=1)
 	{
 		m_clock += timeStep;
 		
