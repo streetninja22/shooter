@@ -36,11 +36,13 @@ namespace inpt
 		InputEventType m_inputType;
 
 	public:
-		InputEvent(InputEventType inputType) : m_inputType(inputType), Event(EventType::INPUT)
+		InputEvent(InputEventType inputType) : m_inputType(inputType), Event()
 		{
 
 		}
 
+		
+		virtual EventType getEventType() { return EventType::INPUT; }
 		InputEventType getInputType()
 		{
 			return m_inputType;

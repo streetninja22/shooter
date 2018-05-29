@@ -2,21 +2,21 @@
 
 #include "framework/System.h"
 #include "Object.h"
+#include "Worldspace.h"
+#include "GameGraphics.h"
 
 
 namespace shooter
 {
 
-	class GameSystem : System
+	class GameSystem : public System
 	{
 		evnt::EventBus* m_gameBus;
 		
+		Worldspace* m_space;
 		
 	public:
-		GameSystem(EventBus* bus) : System(bus), m_gameBus(new evnt::EventBus())
-		{
-			
-		}
+		GameSystem(EventBus* bus);
 		
 		~GameSystem()
 		{

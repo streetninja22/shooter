@@ -12,7 +12,14 @@ public:
 		
 	}
 	
-	virtual void stepBehavior(uint32_t timeStep=1);
+	virtual ~Behavior()
+	{
+		
+	}
+	
+	virtual void stepBehavior(uint32_t timeStep=1)
+	{
+	}
 	
 	void update(uint32_t timeStep=1)
 	{

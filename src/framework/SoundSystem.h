@@ -99,10 +99,12 @@ namespace sound
 	{
 		
 	public:
-		SoundEvent() : Event(EventType::SOUND)
+		SoundEvent()
 		{
 		}
 		
+		
+		virtual EventType getEventType() { return EventType::SOUND; }
 		virtual SoundEventType getSoundEventType() { return SoundEventType::DEFAULT; }
 		
 	};
@@ -111,10 +113,12 @@ namespace sound
 	class SoundEventReturnType : public EventReturnType
 	{
 	public:
-		SoundEventReturnType() : EventReturnType(EventType::SOUND)
+		SoundEventReturnType()
 		{
 		}
 		
+		
+		virtual EventType getType() { return EventType::SOUND; }
 		virtual SoundEventType getSoundEventType() { return SoundEventType::DEFAULT; }
 	};
 	

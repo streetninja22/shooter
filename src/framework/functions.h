@@ -9,7 +9,7 @@ Uint32 getTicks()
 }
 
 
-Uint32 delay(long time)
+void delay(Uint32 time)
 {
 	SDL_Delay(time);
 }

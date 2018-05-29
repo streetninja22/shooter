@@ -3,6 +3,9 @@
 #include "GraphicsSystem.h"
 
 
+#include <iostream>
+
+
 namespace gfx
 {
 	
@@ -149,6 +152,7 @@ namespace gfx
 		
 		virtual ~RenderDrawRectEvent()
 		{
+			std::cout << "Deleting\n";
 		}
 		
 		Rect& getRect() { return m_rect; } //nerf this scrubs
