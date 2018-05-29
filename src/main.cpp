@@ -41,6 +41,7 @@ int main(int argc, char** argv)
 	{
 		long start = getTicks();
 		
+		mainEventBus->update();
 		inputSystem->updateInput();
 		gameSystem->update();
 		gfxSystem->update();

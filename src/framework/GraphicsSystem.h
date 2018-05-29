@@ -146,7 +146,7 @@ namespace gfx {
 	{
 
 	public:
-		GraphicsEvent() : Event(EventType::GRAPHICS)
+		GraphicsEvent()
 		{
 
 		}
@@ -177,10 +177,11 @@ namespace gfx {
 	class GraphicsEventReturnType : public EventReturnType
 	{
 	public:
-		GraphicsEventReturnType() : EventReturnType(EventType::GRAPHICS)
+		GraphicsEventReturnType()
 		{
 		}
 
+		virtual EventType getType() { return EventType::GRAPHICS; }
 		virtual GraphicsEventType getGraphicsEventType() { return GraphicsEventType::DEFAULT; }
 	};
 

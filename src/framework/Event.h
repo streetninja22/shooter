@@ -20,7 +20,7 @@ namespace evnt
 		EventType m_type;
 
 	public:
-		EventReturnType(EventType type) : m_type(type)
+		EventReturnType()
 		{
 		}
 
@@ -29,17 +29,14 @@ namespace evnt
 
 		}
 
-		EventType getType() { return m_type; }
+		virtual EventType getType() { return EventType::DEFAULT; }
 
 	};
 
 	class Event
 	{
-
-		EventType m_type;
-
 	public:
-		Event(EventType type) : m_type(type)
+		Event()
 		{
 
 		}
@@ -49,7 +46,7 @@ namespace evnt
 
 		}
 
-		virtual EventType getEventType() { return m_type; }
+		virtual EventType getEventType() { return EventType::DEFAULT; }
 	};
     
 

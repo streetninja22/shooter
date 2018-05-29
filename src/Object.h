@@ -1,11 +1,13 @@
 #pragma once
 
 #include "general.h"
-#include "Worldspace.h"
 #include "Behavior.h"
+
+//TODO switch from using int to double for positions
 
 namespace shooter
 {
+	class Worldspace;
 
 	class Object
 	{
@@ -31,9 +33,10 @@ namespace shooter
 		}
 		
 		
-		~Object()
+		virtual ~Object()
 		{
-			delete m_behavior;
+			if (m_behavior != nullptr)
+				delete m_behavior;
 		}
 		
 		
@@ -54,7 +57,7 @@ namespace shooter
 		
 		/* Function called when colliding with another object
 		 */
-		virtual void onCollision(Object& collider)
+		virtual void onCollision(Object* collider)
 		{
 		}
 		
@@ -83,12 +86,13 @@ namespace shooter
 	 * @param a The first object
 	 * @param b The second object
 	 */
-	bool checkCollision(const Object& a, const Object& b);
+	bool checkCollision(const Object* a, const Object* b);
+	
 	
 	/* Check if two objects are colliding, and then call their onCollision functions if so
 	 *
 	 * @param a The first object
 	 * @param b The second object
 	 */
-	bool detectCollision(Object& a, Object& b);
+	bool detectCollision(Object* a, Object* b);
 }
