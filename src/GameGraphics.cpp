@@ -9,7 +9,7 @@ void shooter::renderSpace(Worldspace& space, EventBus* bus)
 		{
 			Object* object = space.at(index);
 			
-			gfx::RenderDrawRectEvent* event = new gfx::RenderDrawRectEvent({object->getPosition().x, object->getPosition().y, object->getSize().x, object->getSize().y}, {255, 255, 255, 0});
+			gfx::RenderDrawRectEvent* event = new gfx::RenderDrawRectEvent({object->getPosition().x, object->getPosition().y, object->getSize().x, object->getSize().y}, {255, 255, 0, 0});
 			
 			bus->addEvent(event);
 		}

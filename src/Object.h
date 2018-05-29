@@ -3,6 +3,8 @@
 #include "general.h"
 #include "Behavior.h"
 
+//TODO switch from using int to double for positions
+
 namespace shooter
 {
 	class Worldspace;

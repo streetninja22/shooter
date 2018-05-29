@@ -13,4 +13,4 @@ Pair operator+(Pair a, Pair b);
 
 Pair operator-(Pair a, Pair b);
 
-Pair operator+=(Pair a, Pair b);
+Pair operator+=(Pair& a, Pair& b);

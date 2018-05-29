@@ -38,7 +38,7 @@ namespace shooter
 					return true;
 				}
 		}
-		
+
 		return false;
 	}
 	

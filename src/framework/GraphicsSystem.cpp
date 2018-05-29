@@ -86,6 +86,7 @@ namespace gfx
 
 		}
 
+		m_defaultRenderColor = { 0, 0, 0, 0 };
 	}
 
 
@@ -121,7 +122,7 @@ namespace gfx
 					RenderDrawRectEvent* renderEvent = dynamic_cast<RenderDrawRectEvent*>(evnt);
 					
 					renderDrawRect(&renderEvent->getRect(), renderEvent->getColor());
-					delete renderEvent;
+
 					break;
 				}
 					
@@ -130,7 +131,7 @@ namespace gfx
 					RenderDrawRectEvent* renderEvent = dynamic_cast<RenderDrawRectEvent*>(evnt);
 					
 					renderFillRect(&renderEvent->getRect(), renderEvent->getColor());
-					delete renderEvent;
+					
 					break;
 				}
 					

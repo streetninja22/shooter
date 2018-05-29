@@ -28,9 +28,9 @@ namespace shooter
 				m_space.at(index) = object;
 				object->changeAssociatedSpace(this);
 				
-				if (index > m_usedArrayLength)
+				if (index >= m_usedArrayLength)
 				{
-					m_usedArrayLength = index;
+					m_usedArrayLength = index + 1;
 				}
 				return;
 			}
@@ -53,7 +53,7 @@ namespace shooter
 	{
 		for (int index1 = 0; index1 < m_usedArrayLength; ++index1)
 		{
-			for (int index2 = ++index1; index2 <= m_usedArrayLength; ++index2)
+			for (int index2 = 0; index2 < index1; ++index2)
 			{
 				if (at(index1) != nullptr && at(index2) != nullptr)
 					detectCollision(at(index1), at(index2));

@@ -30,8 +30,8 @@ namespace shooter
 	GameSystem::GameSystem(EventBus* bus) : System(bus), m_gameBus(new evnt::EventBus()), m_space(new Worldspace())
 	{
 		
-		m_space->add(new TestObject({0, 0}, {128, 128}));
-		m_space->add(new TestObject({128, 0}, {128, 128}));
+		m_space->add(new TestObject({258, 128}, {128, 128}));
+		m_space->add(new TestObject({ 0, 128 }, { 128, 128 }, { 0, 0 }, { 1, 0 }));
 	}
 	
 	
