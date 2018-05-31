@@ -1,16 +1,18 @@
 #pragma once
 
 
-struct Pair
+struct Vector
 {
-	int x;
-	int y;
+	double x;
+	double y;
 };
 
 
 
-Pair operator+(Pair a, Pair b);
+Vector operator+(Vector a, Vector b);
 
-Pair operator-(Pair a, Pair b);
+Vector operator-(Vector a, Vector b);
 
-Pair operator+=(Pair& a, Pair& b);
+Vector operator+=(Vector& a, Vector& b);
+
+Vector operator*(Vector a, double b);

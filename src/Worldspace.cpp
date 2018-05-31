@@ -39,12 +39,12 @@ namespace shooter
 	
 	
 	
-	void Worldspace::updatePositions()
+	void Worldspace::updateStates()
 	{
 		for (int index = 0; index < m_usedArrayLength; ++index)
 		{
 			if (at(index) != nullptr)
-				at(index)->move();
+				at(index)->update();
 		}
 	}
 	
@@ -64,7 +64,7 @@ namespace shooter
 	
 	void Worldspace::update()
 	{
-		updatePositions();
+		updateStates();
 		updateCollisions();
 	}
 	

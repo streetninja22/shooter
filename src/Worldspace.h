@@ -24,7 +24,7 @@ namespace shooter
 		
 		void add(Object* object);
 		
-		void updatePositions();
+		void updateStates();
 		
 		void updateCollisions();
 		

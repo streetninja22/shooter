@@ -2,30 +2,41 @@
 
 #include <stdint.h>
 
-class Behavior
+namespace shooter
 {
-	uint32_t m_clock;
-	
-public:
-	Behavior() : m_clock(0)
+	class Object;
+
+	class Behavior
 	{
+	protected:
+		uint32_t m_clock;
+		Object* m_parentObject;
 		
-	}
-	
-	virtual ~Behavior()
-	{
+	public:
+		Behavior(Object* parentObject) : m_clock(0), m_parentObject(parentObject)
+		{
+			
+		}
 		
-	}
-	
-	virtual void stepBehavior(uint32_t timeStep=1)
-	{
-	}
-	
-	void update(uint32_t timeStep=1)
-	{
-		m_clock += timeStep;
+		virtual ~Behavior()
+		{
+			
+		}
 		
-		stepBehavior();
-	}
-	
-};
+		virtual void stepBehavior(uint32_t timeStep)
+		{
+		}
+		
+		void update(uint32_t timeStep=1)
+		{
+			m_clock += timeStep;
+			
+			stepBehavior(m_clock);
+		}
+		
+		Object* getParent() { return m_parentObject; }
+		void changeParent(Object* parentObject) { m_parentObject = parentObject; }
+		
+	};
+
+}

@@ -3,7 +3,7 @@
 #include "general.h"
 #include "Behavior.h"
 
-//TODO switch from using int to double for positions
+//TODO add access to the object's center, rather than base corner
 
 namespace shooter
 {
@@ -11,10 +11,11 @@ namespace shooter
 
 	class Object
 	{
-		Pair m_position;
-		Pair m_size;
-		Pair m_velocity;
-		Pair m_acceleration;
+	protected:
+		Vector m_position;
+		Vector m_size;
+		Vector m_velocity;
+		Vector m_acceleration;
 		
 		Worldspace* m_associatedSpace;
 		
@@ -27,7 +28,7 @@ namespace shooter
 			
 		}
 		
-		Object(Pair position, Pair size, Pair velocity = {0, 0}, Pair acceleration = {0, 0}, Worldspace* associatedSpace = nullptr, Behavior* behavior = nullptr) : m_position(position), m_size(size), m_velocity(velocity), m_acceleration(acceleration), m_associatedSpace(associatedSpace), m_behavior(behavior)
+		Object(Vector position, Vector size, Vector velocity = {0, 0}, Vector acceleration = {0, 0}, Worldspace* associatedSpace = nullptr, Behavior* behavior = nullptr) : m_position(position), m_size(size), m_velocity(velocity), m_acceleration(acceleration), m_associatedSpace(associatedSpace), m_behavior(behavior)
 		{
 			
 		}
@@ -41,17 +42,17 @@ namespace shooter
 		
 		
 		//access functions
-		Pair getPosition()								const { return m_position; }
-		Pair getSize()									const { return m_size; }
-		Pair getVelocity()								const { return m_velocity; }
-		Pair getAcceleration()							const { return m_acceleration; }
+		Vector getPosition()								const { return m_position; }
+		Vector getSize()									const { return m_size; }
+		Vector getVelocity()								const { return m_velocity; }
+		Vector getAcceleration()							const { return m_acceleration; }
 		Worldspace* getAssociatedSpace()				const { return m_associatedSpace; }
 		
 		
-		void setPosition(Pair newPosition)				{ m_position = newPosition; }
-		void setSize(Pair newSize)						{ m_size = newSize; }
-		void setVelocity(Pair newVelocity)				{ m_velocity = newVelocity; }
-		void setAcceleration(Pair newAcceleration)		{ m_acceleration = newAcceleration; }
+		void setPosition(Vector newPosition)				{ m_position = newPosition; }
+		void setSize(Vector newSize)						{ m_size = newSize; }
+		void setVelocity(Vector newVelocity)				{ m_velocity = newVelocity; }
+		void setAcceleration(Vector newAcceleration)		{ m_acceleration = newAcceleration; }
 		void changeAssociatedSpace(Worldspace* space)	{ m_associatedSpace = space; }
 		
 		
