@@ -214,6 +214,14 @@ namespace evnt
 			m_eventBus->addEvent(event);
 		}
 
+		/* fires event in the associated event queue
+		* param event the event to add
+		*/
+		EventReturnType* fireEventNow(Event* event)
+		{
+			return m_eventBus->fireEventNow(event);
+		}
+
 	public:
 		virtual void update()
 		{

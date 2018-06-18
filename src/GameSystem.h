@@ -4,6 +4,8 @@
 #include "Object.h"
 #include "Worldspace.h"
 #include "GameGraphics.h"
+#include "Player.h"
+#include "Enemy.h"
 
 
 namespace shooter
@@ -14,6 +16,12 @@ namespace shooter
 		evnt::EventBus* m_gameBus;
 		
 		Worldspace* m_space;
+
+		PlayerBehavior* m_player;
+
+		bool m_running;
+
+		gfx::Font* m_mainFont;
 		
 	public:
 		GameSystem(EventBus* bus);
@@ -23,8 +31,11 @@ namespace shooter
 			
 		}
 		
+		virtual EventReturnType* eventFired(Event* event) override;
+
+		void updateInput();
 		
-		void update();
+		void update(double framerate, long delay);
 		
 		
 	};

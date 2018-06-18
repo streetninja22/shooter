@@ -20,7 +20,7 @@ namespace shooter
 	
 	void Object::destroy()
 	{
-		
+		delete this;
 	}
 	
 	

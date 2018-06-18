@@ -7,6 +7,19 @@
 
 namespace shooter
 {
+	enum class ObjectType
+	{
+		DEFAULT,
+		PLAYER,
+		BULLET,
+		ENEMY,
+		SHOT,
+
+	};
+
+
+
+
 	class Worldspace;
 
 	class Object
@@ -30,7 +43,9 @@ namespace shooter
 		
 		Object(Vector position, Vector size, Vector velocity = {0, 0}, Vector acceleration = {0, 0}, Worldspace* associatedSpace = nullptr, Behavior* behavior = nullptr) : m_position(position), m_size(size), m_velocity(velocity), m_acceleration(acceleration), m_associatedSpace(associatedSpace), m_behavior(behavior)
 		{
-			
+			if (m_behavior != nullptr)
+				m_behavior->changeParent(this);
+
 		}
 		
 		
@@ -46,7 +61,11 @@ namespace shooter
 		Vector getSize()									const { return m_size; }
 		Vector getVelocity()								const { return m_velocity; }
 		Vector getAcceleration()							const { return m_acceleration; }
-		Worldspace* getAssociatedSpace()				const { return m_associatedSpace; }
+		Worldspace* getAssociatedSpace()					const { return m_associatedSpace; }
+
+		virtual ObjectType getObjectType()					const { return ObjectType::DEFAULT; }
+
+		Vector getCenter()									const { return m_position + m_size / 2; }
 		
 		
 		void setPosition(Vector newPosition)				{ m_position = newPosition; }
@@ -61,6 +80,10 @@ namespace shooter
 		virtual void onCollision(Object* collider)
 		{
 		}
+
+		/* Destroy and delete this object
+		*/
+		virtual void destroy(); //TODO make this not crash the game
 		
 		
 		/* Update the position and velocity of object
@@ -71,10 +94,6 @@ namespace shooter
 		/* Update the object, including position and behavior
 		 */
 		void update();
-		
-		/* Destroy and delete this object
-		 */
-		void destroy();
 		
 	};
 	

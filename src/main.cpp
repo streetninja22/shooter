@@ -36,6 +36,8 @@ int main(int argc, char** argv)
 	
 	shooter::GameSystem* gameSystem = new shooter::GameSystem(mainEventBus);
 	
+	double currentFramerate = 60;
+	long currentDelay = 16;
 	
 	while (true)
 	{
@@ -43,11 +45,14 @@ int main(int argc, char** argv)
 		
 		mainEventBus->update();
 		inputSystem->updateInput();
-		gameSystem->update();
+		gameSystem->update(currentFramerate, currentDelay);
 		gfxSystem->update();
 		soundSystem->update();
 		
-		long time = start + MS_PER_FRAME - getTicks();
+		long time = getTicks() + MS_PER_FRAME - start;
+		currentDelay = time;
+
+		currentFramerate = 1000 / time;
 		
 		delay(time > 0 ? time : 0);
 	}

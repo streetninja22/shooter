@@ -1,8 +1,13 @@
 #include "GameSystem.h"
 #include "GameGraphics.h"
+#include "framework/InputSystem.h"
+#include "framework/assets.h"
+#include <sstream>
 
 
 #include <iostream>
+
+#include "framework/functions.h"
 
 namespace shooter
 {
@@ -19,7 +24,7 @@ namespace shooter
 		
 		virtual void onCollision(Object* collider)
 		{
-			std::cout << "Collision detected!\n";
+			//std::cout << "Collision detected!\n";
 		}
 		
 		
@@ -55,7 +60,7 @@ namespace shooter
 		Vector findDirectionToTarget()
 		{
 			//find vector between points
-			Vector direction = m_target->getPosition() - getParent()->getPosition();
+			Vector direction = m_target->getCenter() - getParent()->getCenter();
 			
 			//normalize vector
 			double length = sqrt(direction.x + direction.y); //use the pythagorean theroem to get the length of the vector between the parent and target
@@ -73,7 +78,10 @@ namespace shooter
 				return;
 			}
 			
-			getParent()->setVelocity(findDirectionToTarget());
+		//	if (m_clock % 10 == 0)
+			{
+				m_parentObject->getAssociatedSpace()->add(new Bullet(m_parentObject->getCenter(), { 10, 10 }, findDirectionToTarget(), { 0, 0 }, m_parentObject->getAssociatedSpace(), nullptr));
+			}
 		}
 		
 	};
@@ -82,25 +90,116 @@ namespace shooter
 	
 	GameSystem::GameSystem(EventBus* bus) : System(bus), m_gameBus(new evnt::EventBus()), m_space(new Worldspace())
 	{
-		
-		m_space->add(new TestObject({258, 128}, {128, 128}));
-		
-		TestBehavior* behavior = new TestBehavior(nullptr);
-		Object* behavingObject = new TestObject({ 0, 200 }, { 30, 50 }, { 0, 0 }, { 0, 0 }, m_space, behavior);
-		behavior->changeParent(behavingObject);
-		
-		m_space->add(behavingObject);
+		PlayerBehavior* player = new PlayerBehavior(nullptr, 6);
+
+		m_space->add(new Player({ 128, 128 }, { 32, 32 }, { 0, 0 }, { 0, 0 }, m_space, player));
+
+		m_space->add(new Enemy({ 28, 68 }, { 32, 32 }, { 0, 0 }, { 0, 0 }, m_space, new TestBehavior(nullptr)));
+
+		m_player = player;
+
+
+		//load font
+		m_mainFont = static_cast<gfx::LoadFontReturnType*>(fireEventNow(new gfx::LoadFontEvent(file::getResourceDirectory("\\font\\Roboto\\Roboto-Regular.ttf"), 12)))->getFont();
+
+		if (m_mainFont != nullptr)
+		{
+			std::cout << "Font loaded successfully\n";
+		}
+
 	}
 	
-	
-	void GameSystem::update()
+
+	EventReturnType* GameSystem::eventFired(Event* event)
 	{
-		m_space->update();
+		if (event->getEventType() == EventType::INPUT)
+		{
+			using namespace inpt;
+			inpt::InputEvent* inEvent = dynamic_cast<inpt::InputEvent*>(event);
+
+			if (inEvent->getInputType() == inpt::InputEventType::KEYBOARD)
+			{
+				inpt::KeyboardEvent* keyEvent = dynamic_cast<inpt::KeyboardEvent*>(event);
+
+				bool state;
+
+				if (keyEvent->getType() == KeyEventType::KEYDOWN)
+					state = true;
+				else
+					state = false;
+
+				switch (keyEvent->getKeyCode())
+				{
+				case KEYCODE_ARROW_LEFT:
+					m_player->setActionStatus(PlayerBehavior::ACTION_MOVE_LEFT, state);
+					break;
+
+				case KEYCODE_ARROW_RIGHT:
+					m_player->setActionStatus(PlayerBehavior::ACTION_MOVE_RIGHT, state);
+					break;
+
+				case KEYCODE_ARROW_UP:
+					m_player->setActionStatus(PlayerBehavior::ACTION_MOVE_FORWARD, state);
+					break;
+
+				case KEYCODE_ARROW_DOWN:
+					m_player->setActionStatus(PlayerBehavior::ACTION_MOVE_BACKWARD, state);
+					break;
+
+				case KEYCODE_SPACE:
+				{
+					if (state == true)
+					{
+						if (m_running == true)
+							m_running = false;
+						else
+							m_running = true;
+					}
+
+					break;
+				}
+				}
+			}
+
+		}
+
+		return nullptr;
+
+
+	}
+
+
+
+	void GameSystem::updateInput()
+	{
+		
+	}
+
+
+	void GameSystem::update(double framerate, long delay)
+	{
+
+
+		if (m_running)
+			m_space->update();
+
+		//show FPS and objects on field
+		std::stringstream textStream;
+		textStream << framerate << " : " << delay << "\n" << m_space->usedSize();
+
+		gfx::LoadTextureReturnType* text = static_cast<gfx::LoadTextureReturnType*>(fireEventNow(new gfx::LoadTextEvent(textStream.str(), m_mainFont, { 255, 255, 255, 255 })));
+
+		addEvent(new gfx::RenderImageEvent(text->getTexture(), NULL, new gfx::Rect{ 480, 32, 128, 32 }));
+
 		
 		renderSpace(*m_space, m_eventBus);
-		
+
+		if (framerate < 60)
+		{
+			std::cout << "Framerate is suffering at " << framerate << " FPS with " << m_space->usedSize() << " objects\n";
+		}
+
 	}
-	
 	
 	
 	

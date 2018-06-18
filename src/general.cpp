@@ -20,3 +20,8 @@ Vector operator*(Vector a, double b)
 {
 	return {a.x * b, a.y * b};
 }
+
+Vector operator/(Vector a, double b)
+{
+	return{ a.x / b, a.y / b };
+}
