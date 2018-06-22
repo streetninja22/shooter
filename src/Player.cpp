@@ -26,7 +26,7 @@ namespace shooter
 
 	void Player::destroy()
 	{
-		std::cout << "Object destroyed!\n";
+		//std::cout << "Object destroyed!\n";
 	}
 
 

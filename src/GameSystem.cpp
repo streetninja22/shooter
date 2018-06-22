@@ -100,7 +100,7 @@ namespace shooter
 
 
 		//load font
-		m_mainFont = static_cast<gfx::LoadFontReturnType*>(fireEventNow(new gfx::LoadFontEvent(file::getResourceDirectory("\\font\\Roboto\\Roboto-Regular.ttf"), 12)))->getFont();
+		m_mainFont = static_cast<gfx::LoadFontReturnType*>(fireEventNow(new gfx::LoadFontEvent(file::getResourceDirectory("/font/Roboto/Roboto-Regular.ttf"), 12)))->getFont();
 
 		if (m_mainFont != nullptr)
 		{
@@ -179,10 +179,11 @@ namespace shooter
 	void GameSystem::update(double framerate, long delay)
 	{
 
-
+		long start = getTicks();
 		if (m_running)
 			m_space->update();
-
+		std::cout << "Delay: " << getTicks() - start << "\n";
+		
 		//show FPS and objects on field
 		std::stringstream textStream;
 		textStream << framerate << " : " << delay << "\n" << m_space->usedSize();
@@ -193,12 +194,6 @@ namespace shooter
 
 		
 		renderSpace(*m_space, m_eventBus);
-
-		if (framerate < 60)
-		{
-			std::cout << "Framerate is suffering at " << framerate << " FPS with " << m_space->usedSize() << " objects\n";
-		}
-
 	}
 	
 	

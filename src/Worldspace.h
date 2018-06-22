@@ -17,6 +17,11 @@ namespace shooter
 		unsigned short m_usedArrayLength;
 		
 		
+		//Rectangle which determines the size of the game area. If 0, then it is infinite. Besides certain types, objects outside are destroyed.
+		Vector zoneLimitRectPosition;
+		Vector zoneLimitRectSize;
+		
+		
 		
 	public:
 		/* Clear the worldspace of allocated objects
