@@ -15,13 +15,12 @@ namespace shooter
 		
 		//Furthest point in array allocated so far
 		unsigned short m_usedArrayLength;
+
 		
-		
-		//Rectangle which determines the size of the game area. If 0, then it is infinite. Besides certain types, objects outside are destroyed.
-		Vector zoneLimitRectPosition;
-		Vector zoneLimitRectSize;
-		
-		
+		/* Returns a reference to the pointer at the given index
+		 *
+		 */
+		Object*& getValueAt(unsigned int index) { return m_space.at(index); }
 		
 	public:
 		/* Clear the worldspace of allocated objects
@@ -33,6 +32,12 @@ namespace shooter
 		* @param object An already allocated pointer to the object to add
 		*/
 		void add(Object* object);
+		
+		/* Destroy an object in the worldspace
+		 *
+		 * @param index The index of the object to delete within the array
+		 */
+		void destroy(unsigned int index);
 		
 		/* Update the state of each object, including positon, velocity and behavior
 		*/
@@ -54,6 +59,12 @@ namespace shooter
 		/* Get the size within the array which has already been allocated
 		*/
 		unsigned int usedSize()			   	 { return m_usedArrayLength; }
+		
+		/* Get the index of an object based on its pointer
+		 *
+		 * @param object The pointer to the object to find
+		 */
+		unsigned int find(Object* object);
 		
 		
 		Worldspace();

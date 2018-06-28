@@ -37,11 +37,11 @@ int main(int argc, char** argv)
 	shooter::GameSystem* gameSystem = new shooter::GameSystem(mainEventBus);
 	
 	double currentFramerate = 60;
-	long currentDelay = 16;
+	Uint32 currentDelay = 16;
 	
 	while (true)
 	{
-		long start = getTicks();
+		Uint32 start = getTicks();
 		
 		mainEventBus->update();
 		inputSystem->updateInput();
@@ -49,12 +49,16 @@ int main(int argc, char** argv)
 		gfxSystem->update();
 		soundSystem->update();
 		
-		long time = getTicks() + MS_PER_FRAME - start;
-		currentDelay = time;
-
-		currentFramerate = 1000 / time;
+		currentDelay = getTicks() - start;
 		
-		delay(time > 0 ? time : 0);
+		//Make sure the framerate doesn't go too far above 60. Having this here and updating delay seems to keep the framerate more stable than putting it at the end of the frame
+		if (currentDelay < MS_PER_FRAME)
+		{
+			delay(MS_PER_FRAME - currentDelay);
+			currentDelay = getTicks() - start;
+		}
+
+		currentFramerate = 1000 / (currentDelay ? currentDelay : 1);
 	}
 	
 	//clean up

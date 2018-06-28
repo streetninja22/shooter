@@ -16,7 +16,7 @@ namespace shooter
 		{
 		case ObjectType::BULLET:
 		{
-		//	collider->destroy();
+			collider->destroy();
 			break;
 		}
 		}

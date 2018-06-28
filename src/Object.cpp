@@ -1,4 +1,5 @@
 #include "Object.h"
+#include "Worldspace.h"
 
 namespace shooter
 {
@@ -20,7 +21,9 @@ namespace shooter
 	
 	void Object::destroy()
 	{
-		delete this;
+		unsigned int index = m_associatedSpace->find(this);
+		
+		m_associatedSpace->destroy(index);
 	}
 	
 	

@@ -1,4 +1,5 @@
 #include "Worldspace.h"
+#include "exceptions.h"
 
 namespace shooter
 {
@@ -37,6 +38,29 @@ namespace shooter
 		}
 	}
 	
+	
+	
+	void Worldspace::destroy(unsigned int index)
+	{
+		if (at(index) != nullptr)
+		{
+			delete at(index);
+			getValueAt(index) = nullptr;
+		}
+	}
+	
+	
+	unsigned int Worldspace::find(Object* object)
+	{
+		for (int index = 0;index < m_usedArrayLength; ++index)
+		{
+			if (at(index) == object)
+			{
+				return index;
+			}
+		}
+		throw new ObjectNotFoundException();
+	}
 	
 	
 	void Worldspace::updateStates()

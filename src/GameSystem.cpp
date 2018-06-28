@@ -78,7 +78,7 @@ namespace shooter
 				return;
 			}
 			
-		//	if (m_clock % 10 == 0)
+			if (m_clock % 10 == 0)
 			{
 				m_parentObject->getAssociatedSpace()->add(new Bullet(m_parentObject->getCenter(), { 10, 10 }, findDirectionToTarget(), { 0, 0 }, m_parentObject->getAssociatedSpace(), nullptr));
 			}
@@ -182,7 +182,6 @@ namespace shooter
 		long start = getTicks();
 		if (m_running)
 			m_space->update();
-		std::cout << "Delay: " << getTicks() - start << "\n";
 		
 		//show FPS and objects on field
 		std::stringstream textStream;
