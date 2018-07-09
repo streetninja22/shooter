@@ -22,6 +22,9 @@ namespace gfx
 		virtual GraphicsEventType getGraphicsEventType() { return GraphicsEventType::LOAD_TEXTURE; }
 	};
 	
+	
+	
+	
 	class LoadFontEvent : public GraphicsEvent
 	{
 		std::string m_filepath;
@@ -37,6 +40,9 @@ namespace gfx
 		
 		virtual GraphicsEventType getGraphicsEventType() override { return GraphicsEventType::LOAD_FONT; }
 	};
+	
+	
+	
 	
 	class LoadTextEvent : public GraphicsEvent
 	{
@@ -55,6 +61,9 @@ namespace gfx
 		
 		virtual GraphicsEventType getGraphicsEventType() override { return GraphicsEventType::LOAD_TEXT; }
 	};
+	
+	
+	
 
 	//An event which calls for the Graphics System to render an image
 	class RenderImageEvent : public RenderEvent
@@ -77,6 +86,17 @@ namespace gfx
 			*/
 		RenderImageEvent(Texture* texture, Rect* srcRect, Rect* dstRect) : m_texture(texture), m_srcRect(srcRect), m_dstRect(dstRect)
 		{
+		}
+		
+		/* Creates a RenderImageEvent
+		 *
+		 * @param sprite The sprite to be rendered
+		 * @param dstRect The destination rectangle, which determins where on the screen the texture will be rendered
+		 */
+		RenderImageEvent(Sprite sprite, Rect* dstRect) : m_texture(sprite.texture), m_dstRect(dstRect)
+		{
+			m_srcRect = new Rect;
+			*m_srcRect = *(sprite.sourceRect);
 		}
 		
 		virtual ~RenderImageEvent() override
@@ -110,8 +130,24 @@ namespace gfx
 			* @param texture the Texture to render
 			* @param srcRect The source rectangle which determines what part of the texture will be rendered
 			* @param dstRect The destination rectangle, which determins where on the screen the texture will be rendered
+		 	* @param angle The angle by which to rotate the image
+		 	* @param center The center of rotation to rotate by
+		 	* @param flipMode The mode to flip the image, NONE does not flip the image
 			*/
 		RenderRotateImageEvent(Texture* texture, Rect* srcRect, Rect* dstRect, double angle, Pair* center, RenderFlipMode flipMode = RenderFlipMode::FLIP_NONE) : RenderImageEvent(texture, srcRect, dstRect), m_angle(angle), m_center(center), m_flipMode(flipMode)
+		{
+		}
+		
+		/* Creates a RenderImageEvent
+		 *
+		 * @param texture the Texture to render
+		 * @param srcRect The source rectangle which determines what part of the texture will be rendered
+		 * @param dstRect The destination rectangle, which determins where on the screen the texture will be rendered
+		 * @param angle The angle by which to rotate the image
+		 * @param center The center of rotation to rotate by
+		 * @param flipMode The mode to flip the image, NONE does not flip the image
+		 */
+		RenderRotateImageEvent(Sprite sprite, Rect* dstRect, double angle, Pair* center, RenderFlipMode flipMode = RenderFlipMode::FLIP_NONE) : RenderImageEvent(sprite, dstRect), m_angle(angle), m_center(center), m_flipMode(flipMode)
 		{
 		}
 		

@@ -3,8 +3,6 @@
 #include "general.h"
 #include "Behavior.h"
 
-//TODO add access to the object's center, rather than base corner
-
 namespace shooter
 {
 	enum class ObjectType

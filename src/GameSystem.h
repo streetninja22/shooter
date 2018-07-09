@@ -23,6 +23,11 @@ namespace shooter
 
 		gfx::Font* m_mainFont;
 		
+		
+		gfx::Texture* m_sprites;
+		
+		Animation* m_animation;
+		
 	public:
 		GameSystem(EventBus* bus);
 		

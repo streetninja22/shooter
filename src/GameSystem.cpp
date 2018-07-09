@@ -9,6 +9,9 @@
 
 #include "framework/functions.h"
 
+
+#include <vector>
+
 namespace shooter
 {
 	
@@ -106,10 +109,25 @@ namespace shooter
 		{
 			std::cout << "Font loaded successfully\n";
 		}
+		
+		
+		//load sprites and animation
+		m_sprites = static_cast<gfx::LoadTextureReturnType*>(fireEventNow(new gfx::LoadTextureEvent(file::getResourceDirectory("/gfx/badwalkcycle.png"))))->getTexture();
+		
+		std::vector<AnimationFrame> track;
+		
+		track.push_back({{m_sprites, new gfx::Rect{0, 0, 128, 128}}, 0});
+		track.push_back({{m_sprites, new gfx::Rect{128, 0, 128, 128}}, 0});
+		track.push_back({{m_sprites, new gfx::Rect{0, 128, 128, 128}}, 0});
+		track.push_back({{m_sprites, new gfx::Rect{128, 128, 128, 128}}, 0});
+		
+		
+		m_animation = new Animation(track, 5);
 
 	}
 	
 
+	//TODO: wtf this isn't what I meant to do, I need to fix this
 	EventReturnType* GameSystem::eventFired(Event* event)
 	{
 		if (event->getEventType() == EventType::INPUT)
@@ -193,6 +211,11 @@ namespace shooter
 
 		
 		renderSpace(*m_space, m_eventBus);
+		
+		
+		
+		//render animation test
+		addEvent(new gfx::RenderImageEvent(m_animation->getNextFrame(), new gfx::Rect{128, 128, 128, 128}));
 	}
 	
 	

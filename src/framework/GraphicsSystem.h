@@ -139,6 +139,15 @@ namespace gfx {
 		
 	};
 
+	
+	//Stores a texture and a source rect in one
+	struct Sprite
+	{
+		Texture* texture;
+		
+		//source rect - a rectangle which is the area of a texture to copy
+		Rect* sourceRect;
+	};
 
 
 	//A basic Graphics System event
@@ -287,6 +296,13 @@ namespace gfx {
 		void renderTexture(Texture* texture, Rect* source, Rect* dest);
 		
 		
+		/* Renders the supplied texture at the given position and size
+		 *
+		 * @param sprite The sprite to render
+		 * @param dest Where to render the texture on the screen
+		 */
+		void renderTexture(Sprite sprite, Rect* dest);
+		
 		/* Renders the supplied texture at the given position and size, with the given rotation and flip
 		 *
 		 * @param texture The texture to render
@@ -297,6 +313,17 @@ namespace gfx {
 		 * @param flipMode How to flip the image
 		 */
 		void renderRotateTexture(Texture* texture, Rect* source, Rect* dest, double angle, Pair* center, RenderFlipMode flipMode = RenderFlipMode::FLIP_NONE);
+		
+		
+		/* Renders the supplied texture at the given position and size, with the given rotation and flip
+		 *
+		 * @param sprite The sprite to render
+		 * @param dest Where to render the texture on the screen
+		 * @param angle The angle to rotate the image by
+		 * @param center The center of rotation
+		 * @param flipMode How to flip the image
+		 */
+		void renderRotateTexture(Sprite sprite, Rect* dest, double angle, Pair* center, RenderFlipMode flipMode = RenderFlipMode::FLIP_NONE);
 		
 		
 		/* Sets the viewport to the given area on the screen

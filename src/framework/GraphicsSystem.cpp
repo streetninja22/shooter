@@ -320,6 +320,17 @@ namespace gfx
 		delete sourceRect;
 		delete destRect;
 	}
+	
+	
+	void GraphicsSystem::renderTexture(Sprite sprite, Rect* dest)
+	{
+		SDL_Rect* sourceRect = SDLRectFromRect(sprite.sourceRect);
+		SDL_Rect* destRect = SDLRectFromRect(dest);
+		
+		SDL_RenderCopy(m_renderer, sprite.texture->getTexture(), sourceRect, destRect);
+		delete destRect;
+	}
+	
 
 	
 	void GraphicsSystem::renderRotateTexture(Texture* texture, Rect* source, Rect* dest, double angle, Pair* center, RenderFlipMode flipMode)
@@ -334,6 +345,17 @@ namespace gfx
 		delete destRect;
 	}
 	
+	
+	void GraphicsSystem::renderRotateTexture(Sprite sprite, Rect* dest, double angle, Pair* center, RenderFlipMode flipMode)
+	{
+		SDL_Rect* sourceRect = SDLRectFromRect(sprite.sourceRect);
+		SDL_Rect* destRect = SDLRectFromRect(dest);
+		SDL_Point* SDLCenter = SDLPointFromPair(center);
+		
+		SDL_RenderCopyEx(m_renderer, sprite.texture->getTexture(), sourceRect, destRect, angle, SDLCenter, static_cast<SDL_RendererFlip>(flipMode));
+		
+		delete destRect;
+	}
 	
 	
 	
