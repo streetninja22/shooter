@@ -4,7 +4,7 @@
 namespace shooter
 {
 	
-	Worldspace::Worldspace() : m_usedArrayLength(0), m_space(std::array<Object*, 1028>())
+	Worldspace::Worldspace(EventBus* bus) : EventNode(bus), m_usedArrayLength(0), m_space(std::array<Object*, 1028>())
 	{
 	}
 	

@@ -93,6 +93,11 @@ namespace shooter
 		/* Update the object, including position and behavior
 		 */
 		void update();
+
+
+		/* Adds an event to the queue of the game of the associated space
+		*/
+		void addEvent(evnt::Event* event);
 		
 	};
 	

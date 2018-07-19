@@ -92,6 +92,7 @@ namespace shooter
 					
 					Animation* anim = createAnimation(animEvent->getAnimId());
 					
+					*(animEvent->getAnimPtr2()) = anim; //this is kind of stupid tbh. oh well
 					
 				}
 			}

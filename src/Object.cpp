@@ -28,6 +28,11 @@ namespace shooter
 	
 	
 	
+	void Object::addEvent(Event* event)
+	{
+		m_associatedSpace->addEvent(event);
+	}
+
 	
 	
 	

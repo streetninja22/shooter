@@ -91,7 +91,7 @@ namespace shooter
 	
 	
 	
-	GameSystem::GameSystem(EventBus* bus) : System(bus), m_gameBus(new evnt::EventBus()), m_space(new Worldspace())
+	GameSystem::GameSystem(EventBus* bus) : System(bus), m_gameBus(new evnt::EventBus()), m_space(new Worldspace(m_gameBus))
 	{
 		PlayerBehavior* player = new PlayerBehavior(nullptr, 6);
 
@@ -109,20 +109,7 @@ namespace shooter
 		{
 			std::cout << "Font loaded successfully\n";
 		}
-		
-		
-		//load sprites and animation
-		m_sprites = static_cast<gfx::LoadTextureReturnType*>(fireEventNow(new gfx::LoadTextureEvent(file::getResourceDirectory("/gfx/badwalkcycle.png"))))->getTexture();
-		
-		std::vector<AnimationFrame> track;
-		
-		track.push_back({{m_sprites, new gfx::Rect{0, 0, 128, 128}}, 0});
-		track.push_back({{m_sprites, new gfx::Rect{128, 0, 128, 128}}, 0});
-		track.push_back({{m_sprites, new gfx::Rect{0, 128, 128, 128}}, 0});
-		track.push_back({{m_sprites, new gfx::Rect{128, 128, 128, 128}}, 0});
-		
-		
-		m_animation = new Animation(track, 5, true);
+
 
 	}
 	

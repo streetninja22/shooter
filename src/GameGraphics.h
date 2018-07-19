@@ -31,7 +31,7 @@ namespace shooter
 		Animation* m_animation;
 		
 	public:
-		VisibleObject(Animation* animation, Vector position, Vector size, Vector velocity = {0, 0}, Vector acceleration = {0, 0}, Worldspace* associatedSpace = nullptr, Behavior* behavior = nullptr) : Object(position, size, velocity, acceleration, associatedSpace, behavior), m_animation(animation)
+		VisibleObject(Vector position, Vector size, Vector velocity = {0, 0}, Vector acceleration = {0, 0}, Worldspace* associatedSpace = nullptr, Behavior* behavior = nullptr, Animation* animation = nullptr) : Object(position, size, velocity, acceleration, associatedSpace, behavior), m_animation(animation)
 		{
 		}
 		

@@ -207,14 +207,6 @@ namespace evnt
 			return eventListener;
 		}
 
-		/* adds event to the associated bus queue
-		* param event the event to add
-		*/
-		void addEvent(Event* event)
-		{
-			m_eventBus->addEvent(event);
-		}
-
 		/* fires event in the associated event queue
 		* param event the event to add
 		*/
@@ -224,6 +216,14 @@ namespace evnt
 		}
 
 	public:
+		/* adds event to the associated bus queue
+		* param event the event to add
+		*/
+		void addEvent(Event* event)
+		{
+			m_eventBus->addEvent(event);
+		}
+
 		virtual void update()
 		{
 

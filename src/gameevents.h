@@ -32,15 +32,15 @@ namespace shooter
 	class LoadAnimationEvent : public GameEvent
 	{
 		AnimationId m_animId;
-		Animation* m_animPtr;
+		Animation** m_animPtrPtr; //pointer to the pointer to the animation, used to set the animation after loading. This is a pointer to a pointer because we want to change what the pointer of the Object's animation is to, but don't want to change by value
 		
 	public:
-		LoadAnimationEvent(AnimationId animId, Animation* animPtr) : GameEvent(), m_animId(animId), m_animPtr(animPtr)
+		LoadAnimationEvent(AnimationId animId, Animation** animPtrPtr) : GameEvent(), m_animId(animId), m_animPtrPtr(animPtrPtr)
 		{
 		}
 		
 		AnimationId getAnimId() { return m_animId; }
-		Animation* getAnimPtr() { return m_animPtr; }
+		Animation** getAnimPtr2() { return m_animPtrPtr; }
 		
 		virtual GameEventType getGameEventType() override { return GameEventType::LOAD_ANIMATION; }
 	};
