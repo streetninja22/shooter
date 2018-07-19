@@ -16,10 +16,10 @@ namespace shooter
 {
 	
 	
-	class TestObject : public Object
+	class TestObject : public Enemy
 	{
 	public:
-		TestObject(Vector position, Vector size, Vector velocity = {0, 0}, Vector acceleration = {0, 0}, Worldspace* associatedSpace = nullptr, Behavior* behavior = nullptr) : Object(position, size, velocity, acceleration, associatedSpace, behavior)
+		TestObject(Animation* animation, Vector position, Vector size, Vector velocity = {0, 0}, Vector acceleration = {0, 0}, Worldspace* associatedSpace = nullptr, Behavior* behavior = nullptr) : Enemy(animation, position, size, velocity, acceleration, associatedSpace, behavior)
 		{
 			
 		}
@@ -83,7 +83,7 @@ namespace shooter
 			
 			if (m_clock % 10 == 0)
 			{
-				m_parentObject->getAssociatedSpace()->add(new Bullet(m_parentObject->getCenter(), { 10, 10 }, findDirectionToTarget(), { 0, 0 }, m_parentObject->getAssociatedSpace(), nullptr));
+				m_parentObject->getAssociatedSpace()->add(new Object(m_parentObject->getCenter(), { 10, 10 }, findDirectionToTarget(), { 0, 0 }, m_parentObject->getAssociatedSpace(), nullptr));
 			}
 		}
 		
@@ -122,7 +122,7 @@ namespace shooter
 		track.push_back({{m_sprites, new gfx::Rect{128, 128, 128, 128}}, 0});
 		
 		
-		m_animation = new Animation(track, 5);
+		m_animation = new Animation(track, 5, true);
 
 	}
 	
@@ -210,12 +210,9 @@ namespace shooter
 		addEvent(new gfx::RenderImageEvent(text->getTexture(), NULL, new gfx::Rect{ 480, 32, 128, 32 }));
 
 		
+		//render
 		renderSpace(*m_space, m_eventBus);
 		
-		
-		
-		//render animation test
-		addEvent(new gfx::RenderImageEvent(m_animation->getNextFrame(), new gfx::Rect{128, 128, 128, 128}));
 	}
 	
 	

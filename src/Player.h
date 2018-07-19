@@ -1,17 +1,18 @@
 #pragma once
 
 #include "Object.h"
+#include "GameGraphics.h"
 #include <bitset>
 
 namespace shooter
 {
 
-	class Player : public Object
+	class Player : public VisibleObject
 	{
 
 
 	public:
-		Player(Vector position, Vector size, Vector velocity, Vector acceleration, Worldspace* space, Behavior* behavior) : Object(position, size, velocity, acceleration, space, behavior)
+		Player(Animation* animation, Vector position, Vector size, Vector velocity, Vector acceleration, Worldspace* space, Behavior* behavior) : VisibleObject(animation, position, size, velocity, acceleration, space, behavior)
 		{
 		}
 

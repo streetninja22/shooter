@@ -2,6 +2,7 @@
 
 #include "general.h"
 #include "Behavior.h"
+#include "Animation.h"
 
 namespace shooter
 {

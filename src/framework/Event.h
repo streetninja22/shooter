@@ -12,6 +12,7 @@ namespace evnt
 		GRAPHICS,
 		INPUT,
 		SOUND,
+		GAME,
 	};
 
 

@@ -147,6 +147,8 @@ namespace gfx {
 		
 		//source rect - a rectangle which is the area of a texture to copy
 		Rect* sourceRect;
+		
+		bool visible = false;
 	};
 
 
