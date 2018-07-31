@@ -1,5 +1,8 @@
 #include "GameGraphics.h"
 
+
+#define SPRITE_SCALE_FACTOR 1
+
 namespace shooter
 {
 
@@ -12,14 +15,16 @@ namespace shooter
 				if (space.at(index)->isVisibleObject())
 				{
 					VisibleObject* object = dynamic_cast<VisibleObject*>(space.at(index));
+
+					gfx::Sprite sprite = object->getNextAnimationFrame();
 					
 					gfx::Rect* dstRect = new gfx::Rect();
 					
 					dstRect->x = object->getPosition().x;
 					dstRect->y = object->getPosition().y;
 					
-					dstRect->w = object->getSize().x;
-					dstRect->h = object->getSize().y;
+					dstRect->w = sprite.texture->getWidth() * SPRITE_SCALE_FACTOR;
+					dstRect->h = sprite.texture->getHeight() * SPRITE_SCALE_FACTOR;
 					
 					addEvent(new gfx::RenderImageEvent(object->getNextAnimationFrame(), dstRect));
 				}
@@ -119,14 +124,18 @@ namespace shooter
 	
 	Animation* getAnimationFromEventReturn(EventReturnType* event)
 	{
-		if (event->getType() == EventType::GAME)
+		if (event != nullptr)
 		{
-			if (dynamic_cast<GameEventReturnType*>(event)->getGameEventType() == GameEventType::LOAD_ANIMATION)
+			if (event->getType() == EventType::GAME)
 			{
-				LoadAnimationReturnType* animEvent = dynamic_cast<LoadAnimationReturnType*>(event);
-				
-				return animEvent->getAnimation();
+				if (dynamic_cast<GameEventReturnType*>(event)->getGameEventType() == GameEventType::LOAD_ANIMATION)
+				{
+					LoadAnimationReturnType* animEvent = dynamic_cast<LoadAnimationReturnType*>(event);
+
+					return animEvent->getAnimation();
+				}
 			}
 		}
+		return nullptr;
 	}
 }

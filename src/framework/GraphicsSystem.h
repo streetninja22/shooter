@@ -63,10 +63,14 @@ namespace gfx {
 
 	SDL_Rect* SDLRectFromRect(Rect* r2);
 
-    class Texture
-    {
-        SDL_Texture* m_texture;
+	class Texture
+	{
+		SDL_Texture* m_texture;
 
+		bool m_queried;
+
+		int m_width;
+		int m_height;
 
 	public:
 		SDL_Texture* getTexture()
@@ -74,14 +78,14 @@ namespace gfx {
 			return m_texture;
 		}
 
-        Texture() : m_texture(nullptr)
-        {
-        }
-
-		Texture(SDL_Texture* texture) : m_texture(texture)
+		Texture() : m_texture(nullptr), m_queried(false)
 		{
 		}
-		
+
+		Texture(SDL_Texture* texture) : m_texture(texture), m_queried(false)
+		{
+		}
+
 		void freeTexture()
 		{
 			SDL_DestroyTexture(m_texture);
@@ -92,7 +96,27 @@ namespace gfx {
 			freeTexture();
 			m_texture = texture;
 		}
+
+		void updateQueryTexture()
+		{
+			SDL_QueryTexture(m_texture, nullptr, nullptr, &m_width, &m_height);
+			m_queried = true;
+		}
+
+
+		int getHeight()
+		{
+			if (!m_queried)
+				updateQueryTexture();
+			return m_height;
+		}
 		
+		int getWidth()
+		{
+			if (!m_queried)
+				updateQueryTexture();
+			return m_width;
+		}
 		
 		~Texture()
 		{
@@ -147,8 +171,6 @@ namespace gfx {
 		
 		//source rect - a rectangle which is the area of a texture to copy
 		Rect* sourceRect;
-		
-		bool visible = false;
 	};
 
 	//Make sure the sprite is valid and non-null

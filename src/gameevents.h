@@ -73,7 +73,7 @@ namespace shooter
 		{
 		}
 		
-		virtual GameEventType getGameEventTYpe() { return GameEventType::LOAD_ANIMATION; }
+		virtual GameEventType getGameEventType() { return GameEventType::LOAD_ANIMATION; }
 		
 		Animation* getAnimation() { return m_animation; }
 	};

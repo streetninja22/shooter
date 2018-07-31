@@ -335,7 +335,7 @@ namespace gfx
 	
 	void GraphicsSystem::renderTexture(Sprite sprite, Rect* dest)
 	{
-		if (sprite.visible && isSpriteValid(sprite))
+		if (isSpriteValid(sprite))
 		{
 			SDL_Rect* sourceRect = SDLRectFromRect(sprite.sourceRect);
 			SDL_Rect* destRect = SDLRectFromRect(dest);
@@ -365,7 +365,7 @@ namespace gfx
 	
 	void GraphicsSystem::renderRotateTexture(Sprite sprite, Rect* dest, double angle, Pair* center, RenderFlipMode flipMode)
 	{
-		if (sprite.visible && isSpriteValid(sprite))
+		if (isSpriteValid(sprite))
 		{
 			SDL_Rect* sourceRect = SDLRectFromRect(sprite.sourceRect);
 			SDL_Rect* destRect = SDLRectFromRect(dest);

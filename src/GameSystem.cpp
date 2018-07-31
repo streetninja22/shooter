@@ -84,15 +84,7 @@ namespace shooter
 		{
 			if (m_bulletAnimation == nullptr)
 			{
-				EventReturnType* animationReturn = m_parentObject->fireEventNow(new LoadAnimationEvent(ANIMATION_BULLET_SMALL));
-				
-				if (animationReturn->getType() == evnt::EventType::GAME)
-				{
-					if (dynamic_cast<GameEventReturnType*>(animationReturn)->getGameEventType() == GameEventType::LOAD_ANIMATION)
-					{
-						m_bulletAnimation = dynamic_cast<LoadAnimationReturnType*>(animationReturn)->getAnimation();
-					}
-				}
+				m_bulletAnimation = getAnimationFromEventReturn(m_parentObject->fireEventNow(new LoadAnimationEvent(ANIMATION_BULLET_SMALL)));
 				
 			}
 			
@@ -104,7 +96,7 @@ namespace shooter
 			
 			if (m_clock % 10 == 0)
 			{
-				m_parentObject->getAssociatedSpace()->add(new Bullet(m_parentObject->getCenter(), { 10, 10 }, /*findDirectionToTarget()*/ {5, 0}, { 0, 0 }, m_parentObject->getAssociatedSpace(), nullptr, m_bulletAnimation));
+				m_parentObject->getAssociatedSpace()->add(new Bullet(m_parentObject->getCenter(), { 10, 10 }, findDirectionToTarget(), { 0, 0 }, m_parentObject->getAssociatedSpace(), nullptr, m_bulletAnimation));
 			}
 		}
 		
@@ -112,7 +104,7 @@ namespace shooter
 	
 	
 	
-	GameSystem::GameSystem(EventBus* bus) : System(bus), m_gameBus(new evnt::EventBus()), m_gfxManager(bus), m_space(new Worldspace(m_gameBus))
+	GameSystem::GameSystem(EventBus* bus) : System(bus), m_gameBus(new evnt::EventBus()), m_gfxManager(bus), m_space(new Worldspace(bus))
 	{
 		PlayerBehavior* player = new PlayerBehavior(nullptr, 6);
 		
