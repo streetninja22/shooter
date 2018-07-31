@@ -2,6 +2,7 @@
 
 #include "framework/Event.h"
 #include "GameGraphics.h"
+#include "AnimationId.h"
 
 
 namespace shooter
@@ -27,22 +28,54 @@ namespace shooter
 		virtual GameEventType getGameEventType() { return GameEventType::DEFAULT; }
 	};
 	
+	class GameEventReturnType : public evnt::EventReturnType
+	{
+		
+	public:
+		GameEventReturnType() : EventReturnType()
+		{
+		}
+		
+		evnt::EventType getType() override { return EventType::GAME; }
+		
+		virtual GameEventType getGameEventType() { return GameEventType::DEFAULT; }
+	};
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	class LoadAnimationEvent : public GameEvent
 	{
 		AnimationId m_animId;
-		Animation** m_animPtrPtr; //pointer to the pointer to the animation, used to set the animation after loading. This is a pointer to a pointer because we want to change what the pointer of the Object's animation is to, but don't want to change by value
 		
 	public:
-		LoadAnimationEvent(AnimationId animId, Animation** animPtrPtr) : GameEvent(), m_animId(animId), m_animPtrPtr(animPtrPtr)
+		LoadAnimationEvent(AnimationId animId) : GameEvent(), m_animId(animId)
 		{
 		}
 		
 		AnimationId getAnimId() { return m_animId; }
-		Animation** getAnimPtr2() { return m_animPtrPtr; }
 		
 		virtual GameEventType getGameEventType() override { return GameEventType::LOAD_ANIMATION; }
+	};
+	
+	
+	class LoadAnimationReturnType : public GameEventReturnType
+	{
+		Animation* m_animation;
+		
+	public:
+		LoadAnimationReturnType(Animation* animation) : GameEventReturnType(), m_animation(animation)
+		{
+		}
+		
+		virtual GameEventType getGameEventTYpe() { return GameEventType::LOAD_ANIMATION; }
+		
+		Animation* getAnimation() { return m_animation; }
 	};
 	
 }

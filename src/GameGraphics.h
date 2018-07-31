@@ -6,22 +6,12 @@
 #include "framework/GraphicsEvents.h"
 #include "framework/assets.h"
 #include "gameevents.h"
+#include "AnimationId.h"
 
 namespace shooter
 {
 	
 	void renderSpace(Worldspace& space, EventBus* bus);
-	
-	
-	
-	enum AnimationId
-	{
-		ANIMATION_DEFAULT,
-		ANIMATION_REIMU_IDLE,
-		ANIMATION_FAIRY_IDLE,
-		ANIMATION_BULLET_SMALL,
-		ANIMATION_MAX,
-	};
 
 	
 	
@@ -36,6 +26,8 @@ namespace shooter
 		}
 		
 		gfx::Sprite getNextAnimationFrame();
+		
+		virtual bool isVisibleObject() override { return true; }
 	};
 	
 	
@@ -63,5 +55,10 @@ namespace shooter
 		
 		EventReturnType* eventFired(Event* event) override;
 		
+		void renderSpace(Worldspace& space);
 	};
+	
+	
+	
+	Animation* getAnimationFromEventReturn(EventReturnType* event);
 }

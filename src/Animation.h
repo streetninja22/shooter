@@ -31,7 +31,7 @@ namespace shooter
 		
 	public:
 		//Initialize empty Animation
-		Animation() : m_clock(0), m_prevFrameTime(0), m_currentFrameIndex(0)
+		Animation() : m_clock(0), m_prevFrameTime(0), m_currentFrameIndex(0), m_static(false)
 		{
 		}
 		

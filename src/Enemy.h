@@ -14,9 +14,9 @@ namespace shooter
 
 
 	public:
-		Bullet(Animation* animation, Vector position, Vector size, Vector velocity, Vector acceleration, Worldspace* space, Behavior* behavior) : VisibleObject(animation, position, size, velocity, acceleration, space, behavior)
+		Bullet(Vector position, Vector size, Vector velocity, Vector acceleration, Worldspace* space, Behavior* behavior, Animation* animation) : VisibleObject(position, size, velocity, acceleration, space, behavior, animation)
 		{
-
+			
 		}
 
 
@@ -42,7 +42,7 @@ namespace shooter
 		int m_health;
 
 	public:
-		Enemy(Animation* animation, Vector position, Vector size, Vector velocity, Vector acceleration, Worldspace* space, Behavior* behavior) : VisibleObject(animation, position, size, velocity, acceleration, space, behavior)
+		Enemy(Vector position, Vector size, Vector velocity, Vector acceleration, Worldspace* space, Behavior* behavior, Animation* animation) : VisibleObject(position, size, velocity, acceleration, space, behavior, animation)
 		{
 		}
 

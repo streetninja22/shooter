@@ -12,7 +12,7 @@ namespace shooter
 
 
 	public:
-		Player(Animation* animation, Vector position, Vector size, Vector velocity, Vector acceleration, Worldspace* space, Behavior* behavior) : VisibleObject(animation, position, size, velocity, acceleration, space, behavior)
+		Player(Vector position, Vector size, Vector velocity, Vector acceleration, Worldspace* space, Behavior* behavior, Animation* animation) : VisibleObject(position, size, velocity, acceleration, space, behavior, animation)
 		{
 		}
 

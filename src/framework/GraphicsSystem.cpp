@@ -5,6 +5,14 @@
 
 namespace gfx
 {
+	
+	bool isSpriteValid(Sprite sprite)
+	{
+		if (sprite.texture != nullptr && sprite.sourceRect != nullptr)
+			return true;
+		return false;
+	}
+
 
 	SDL_Rect* SDLRectFromRect(SDL_Rect* r1, Rect* r2)
 	{
@@ -313,18 +321,21 @@ namespace gfx
 
 	void GraphicsSystem::renderTexture(Texture* texture, Rect* source, Rect* dest)
 	{
-		SDL_Rect* sourceRect = SDLRectFromRect(source);
-		SDL_Rect* destRect = SDLRectFromRect(dest);
+		if (texture != nullptr)
+		{
+			SDL_Rect* sourceRect = SDLRectFromRect(source);
+			SDL_Rect* destRect = SDLRectFromRect(dest);
 
-		SDL_RenderCopy(m_renderer, texture->getTexture(), sourceRect, destRect);
-		delete sourceRect;
-		delete destRect;
+			SDL_RenderCopy(m_renderer, texture->getTexture(), sourceRect, destRect);
+			delete sourceRect;
+			delete destRect;
+		}
 	}
 	
 	
 	void GraphicsSystem::renderTexture(Sprite sprite, Rect* dest)
 	{
-		if (sprite.visible)
+		if (sprite.visible && isSpriteValid(sprite))
 		{
 			SDL_Rect* sourceRect = SDLRectFromRect(sprite.sourceRect);
 			SDL_Rect* destRect = SDLRectFromRect(dest);
@@ -338,20 +349,23 @@ namespace gfx
 	
 	void GraphicsSystem::renderRotateTexture(Texture* texture, Rect* source, Rect* dest, double angle, Pair* center, RenderFlipMode flipMode)
 	{
-		SDL_Rect* sourceRect = SDLRectFromRect(source);
-		SDL_Rect* destRect = SDLRectFromRect(dest);
-		SDL_Point* SDLCenter = SDLPointFromPair(center);
-		
-		SDL_RenderCopyEx(m_renderer, texture->getTexture(), sourceRect, destRect, angle, SDLCenter, static_cast<SDL_RendererFlip>(flipMode));
-		
-		delete sourceRect;
-		delete destRect;
+		if (texture != nullptr)
+		{
+			SDL_Rect* sourceRect = SDLRectFromRect(source);
+			SDL_Rect* destRect = SDLRectFromRect(dest);
+			SDL_Point* SDLCenter = SDLPointFromPair(center);
+			
+			SDL_RenderCopyEx(m_renderer, texture->getTexture(), sourceRect, destRect, angle, SDLCenter, static_cast<SDL_RendererFlip>(flipMode));
+			
+			delete sourceRect;
+			delete destRect;
+		}
 	}
 	
 	
 	void GraphicsSystem::renderRotateTexture(Sprite sprite, Rect* dest, double angle, Pair* center, RenderFlipMode flipMode)
 	{
-		if (sprite.visible)
+		if (sprite.visible && isSpriteValid(sprite))
 		{
 			SDL_Rect* sourceRect = SDLRectFromRect(sprite.sourceRect);
 			SDL_Rect* destRect = SDLRectFromRect(dest);

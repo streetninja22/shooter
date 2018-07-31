@@ -151,7 +151,10 @@ namespace gfx {
 		bool visible = false;
 	};
 
-
+	//Make sure the sprite is valid and non-null
+	bool isSpriteValid(Sprite sprite);
+	
+	
 	//A basic Graphics System event
 	class GraphicsEvent : public Event
 	{

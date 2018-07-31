@@ -2,6 +2,9 @@
 
 #include <stdint.h>
 
+
+#include <iostream>
+
 namespace shooter
 {
 	class Object;
@@ -16,6 +19,10 @@ namespace shooter
 		Behavior(Object* parentObject) : m_clock(0), m_parentObject(parentObject)
 		{
 			
+		}
+		
+		Behavior() : m_clock(0), m_parentObject(nullptr)
+		{
 		}
 		
 		virtual ~Behavior()
@@ -35,7 +42,11 @@ namespace shooter
 		}
 		
 		Object* getParent() { return m_parentObject; }
-		void changeParent(Object* parentObject) { m_parentObject = parentObject; }
+		void changeParent(Object* parentObject)
+		{
+			m_parentObject = parentObject;
+			
+		}
 		
 	};
 

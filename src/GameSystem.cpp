@@ -19,7 +19,7 @@ namespace shooter
 	class TestObject : public Enemy
 	{
 	public:
-		TestObject(Animation* animation, Vector position, Vector size, Vector velocity = {0, 0}, Vector acceleration = {0, 0}, Worldspace* associatedSpace = nullptr, Behavior* behavior = nullptr) : Enemy(animation, position, size, velocity, acceleration, associatedSpace, behavior)
+		TestObject(Vector position, Vector size, Vector velocity = {0, 0}, Vector acceleration = {0, 0}, Worldspace* associatedSpace = nullptr, Behavior* behavior = nullptr, Animation* animation = nullptr) : Enemy(position, size, velocity, acceleration, associatedSpace, behavior, animation)
 		{
 			
 		}
@@ -37,10 +37,17 @@ namespace shooter
 	{
 		Object* m_target;
 		
+		Animation* m_bulletAnimation;
+		
 	public:
-		TestBehavior(Object* parentObject) : Behavior(parentObject)
+		TestBehavior(Object* parentObject) : Behavior(parentObject), m_bulletAnimation(nullptr)
 		{
 			m_target = nullptr;
+		}
+		
+		TestBehavior() : Behavior(), m_target(nullptr), m_bulletAnimation(nullptr)
+		{
+			
 		}
 		
 		Object* findTarget()
@@ -75,6 +82,20 @@ namespace shooter
 		
 		virtual void stepBehavior(uint32_t timeStep) override
 		{
+			if (m_bulletAnimation == nullptr)
+			{
+				EventReturnType* animationReturn = m_parentObject->fireEventNow(new LoadAnimationEvent(ANIMATION_BULLET_SMALL));
+				
+				if (animationReturn->getType() == evnt::EventType::GAME)
+				{
+					if (dynamic_cast<GameEventReturnType*>(animationReturn)->getGameEventType() == GameEventType::LOAD_ANIMATION)
+					{
+						m_bulletAnimation = dynamic_cast<LoadAnimationReturnType*>(animationReturn)->getAnimation();
+					}
+				}
+				
+			}
+			
 			if (m_target == nullptr)
 			{
 				findTarget();
@@ -83,7 +104,7 @@ namespace shooter
 			
 			if (m_clock % 10 == 0)
 			{
-				m_parentObject->getAssociatedSpace()->add(new Object(m_parentObject->getCenter(), { 10, 10 }, findDirectionToTarget(), { 0, 0 }, m_parentObject->getAssociatedSpace(), nullptr));
+				m_parentObject->getAssociatedSpace()->add(new Bullet(m_parentObject->getCenter(), { 10, 10 }, /*findDirectionToTarget()*/ {5, 0}, { 0, 0 }, m_parentObject->getAssociatedSpace(), nullptr, m_bulletAnimation));
 			}
 		}
 		
@@ -91,13 +112,18 @@ namespace shooter
 	
 	
 	
-	GameSystem::GameSystem(EventBus* bus) : System(bus), m_gameBus(new evnt::EventBus()), m_space(new Worldspace(m_gameBus))
+	GameSystem::GameSystem(EventBus* bus) : System(bus), m_gameBus(new evnt::EventBus()), m_gfxManager(bus), m_space(new Worldspace(m_gameBus))
 	{
 		PlayerBehavior* player = new PlayerBehavior(nullptr, 6);
+		
+		Animation* playerAnim = getAnimationFromEventReturn(fireEventNow(new LoadAnimationEvent(AnimationId::ANIMATION_REIMU_IDLE)));
+		
+		Animation* enemyAnim = getAnimationFromEventReturn(fireEventNow(new LoadAnimationEvent(AnimationId::ANIMATION_FAIRY_IDLE)));
+		
 
-		m_space->add(new Player({ 128, 128 }, { 32, 32 }, { 0, 0 }, { 0, 0 }, m_space, player));
+		m_space->add(new Player({ 128, 128 }, { 32, 32 }, { 0, 0 }, { 0, 0 }, m_space, player, playerAnim));
 
-		m_space->add(new Enemy({ 28, 68 }, { 32, 32 }, { 0, 0 }, { 0, 0 }, m_space, new TestBehavior(nullptr)));
+		m_space->add(new Enemy({ 28, 68 }, { 32, 32 }, { 0, 0 }, { 0, 0 }, m_space, new TestBehavior(nullptr), enemyAnim));
 
 		m_player = player;
 
@@ -198,7 +224,7 @@ namespace shooter
 
 		
 		//render
-		renderSpace(*m_space, m_eventBus);
+		m_gfxManager.renderSpace(*m_space);
 		
 	}
 	

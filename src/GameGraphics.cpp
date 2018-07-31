@@ -3,17 +3,26 @@
 namespace shooter
 {
 
-	void renderSpace(Worldspace& space, EventBus* bus)
+	void GraphicsManager::renderSpace(Worldspace& space)
 	{
 		for (int index = 0; index < space.usedSize(); ++index)
 		{
 			if (space.at(index) != nullptr)
 			{
-				Object* object = space.at(index);
-				
-				gfx::RenderDrawRectEvent* event = new gfx::RenderDrawRectEvent({static_cast<int>(object->getPosition().x), static_cast<int>(object->getPosition().y), static_cast<int>(object->getSize().x), static_cast<int>(object->getSize().y)}, {255, 255, 0, 0});
-				
-				bus->addEvent(event);
+				if (space.at(index)->isVisibleObject())
+				{
+					VisibleObject* object = dynamic_cast<VisibleObject*>(space.at(index));
+					
+					gfx::Rect* dstRect = new gfx::Rect();
+					
+					dstRect->x = object->getPosition().x;
+					dstRect->y = object->getPosition().y;
+					
+					dstRect->w = object->getSize().x;
+					dstRect->h = object->getSize().y;
+					
+					addEvent(new gfx::RenderImageEvent(object->getNextAnimationFrame(), dstRect));
+				}
 			}
 		}
 	}
@@ -57,9 +66,9 @@ namespace shooter
 		{
 			case ANIMATION_REIMU_IDLE:
 			{
-				animTrack.push_back({{m_spriteSheet, new Rect {0, 0, 16, 16}}, 3});
-				animTrack.push_back({{m_spriteSheet, new Rect {16, 0, 16, 16}}, 3});
-				animTrack.push_back({{ m_spriteSheet, new Rect {32, 0, 16, 16}}, 3});
+				animTrack.push_back({{m_spriteSheet, new Rect {0, 0, 16, 16}}, 15});
+				animTrack.push_back({{m_spriteSheet, new Rect {16, 0, 16, 16}}, 15});
+				animTrack.push_back({{ m_spriteSheet, new Rect {32, 0, 16, 16}}, 15});
 				break;
 			}
 			case ANIMATION_FAIRY_IDLE:
@@ -75,6 +84,12 @@ namespace shooter
 				break;
 			}
 		}
+		
+		Animation* returnAnim = new Animation(animTrack);
+		
+		returnAnim->setStatic(isStatic);
+		
+		return returnAnim;
 	}
 	
 	
@@ -92,9 +107,25 @@ namespace shooter
 					
 					Animation* anim = createAnimation(animEvent->getAnimId());
 					
-					*(animEvent->getAnimPtr2()) = anim; //this is kind of stupid tbh. oh well
+					return new LoadAnimationReturnType(anim);
 					
 				}
+			}
+		}
+		return nullptr;
+	}
+	
+	
+	
+	Animation* getAnimationFromEventReturn(EventReturnType* event)
+	{
+		if (event->getType() == EventType::GAME)
+		{
+			if (dynamic_cast<GameEventReturnType*>(event)->getGameEventType() == GameEventType::LOAD_ANIMATION)
+			{
+				LoadAnimationReturnType* animEvent = dynamic_cast<LoadAnimationReturnType*>(event);
+				
+				return animEvent->getAnimation();
 			}
 		}
 	}
