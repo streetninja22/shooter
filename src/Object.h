@@ -2,6 +2,9 @@
 
 #include "general.h"
 #include "Behavior.h"
+#include "Animation.h"
+
+#include <framework/Event.h>
 
 namespace shooter
 {
@@ -43,7 +46,6 @@ namespace shooter
 		{
 			if (m_behavior != nullptr)
 				m_behavior->changeParent(this);
-
 		}
 		
 		
@@ -70,8 +72,11 @@ namespace shooter
 		void setSize(Vector newSize)						{ m_size = newSize; }
 		void setVelocity(Vector newVelocity)				{ m_velocity = newVelocity; }
 		void setAcceleration(Vector newAcceleration)		{ m_acceleration = newAcceleration; }
-		void changeAssociatedSpace(Worldspace* space)	{ m_associatedSpace = space; }
+		void changeAssociatedSpace(Worldspace* space)		{ m_associatedSpace = space; }
 		
+		
+		//Tells if object is a VisibleObject or not. Overloaded in VisibleObject classs
+		virtual bool isVisibleObject() 						{ return false; }
 		
 		/* Function called when colliding with another object
 		 */
@@ -92,6 +97,15 @@ namespace shooter
 		/* Update the object, including position and behavior
 		 */
 		void update();
+
+
+		/* Adds an event to the queue of the game of the associated space
+		*/
+		void addEvent(evnt::Event* event);
+		
+		/* Adds an event to the queue of the game of the associated space
+		 */
+		evnt::EventReturnType* fireEventNow(evnt::Event* event);
 		
 	};
 	

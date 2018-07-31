@@ -3,11 +3,12 @@
 #include "general.h"
 #include "Object.h"
 #include <array>
+#include "framework/Event.h"
 
 namespace shooter
 {
 
-	class Worldspace
+	class Worldspace : public EventNode
 	{
 				
 		std::array<Object*, 1028> m_space;
@@ -67,7 +68,7 @@ namespace shooter
 		unsigned int find(Object* object);
 		
 		
-		Worldspace();
+		Worldspace(EventBus* bus);
 		
 		
 		~Worldspace()

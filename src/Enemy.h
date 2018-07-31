@@ -2,20 +2,21 @@
 
 #include "Object.h"
 #include "Player.h"
+#include "GameGraphics.h"
 
 
 
 namespace shooter
 {
-	class Bullet : public Object
+	class Bullet : public VisibleObject
 	{
 	protected:
 
 
 	public:
-		Bullet(Vector position, Vector size, Vector velocity, Vector acceleration, Worldspace* space, Behavior* behavior) : Object(position, size, velocity, acceleration, space, behavior)
+		Bullet(Vector position, Vector size, Vector velocity, Vector acceleration, Worldspace* space, Behavior* behavior, Animation* animation) : VisibleObject(position, size, velocity, acceleration, space, behavior, animation)
 		{
-
+			
 		}
 
 
@@ -34,14 +35,14 @@ namespace shooter
 
 
 
-	class Enemy : public Object
+	class Enemy : public VisibleObject
 	{
 	protected:
 
 		int m_health;
 
 	public:
-		Enemy(Vector position, Vector size, Vector velocity, Vector acceleration, Worldspace* space, Behavior* behavior) : Object(position, size, velocity, acceleration, space, behavior)
+		Enemy(Vector position, Vector size, Vector velocity, Vector acceleration, Worldspace* space, Behavior* behavior, Animation* animation) : VisibleObject(position, size, velocity, acceleration, space, behavior, animation)
 		{
 		}
 

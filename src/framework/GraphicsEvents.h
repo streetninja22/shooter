@@ -93,10 +93,20 @@ namespace gfx
 		 * @param sprite The sprite to be rendered
 		 * @param dstRect The destination rectangle, which determins where on the screen the texture will be rendered
 		 */
-		RenderImageEvent(Sprite sprite, Rect* dstRect) : m_texture(sprite.texture), m_dstRect(dstRect)
+		RenderImageEvent(Sprite sprite, Rect* dstRect) : m_dstRect(dstRect)
 		{
-			m_srcRect = new Rect;
-			*m_srcRect = *(sprite.sourceRect);
+			if (isSpriteValid(sprite))
+			{
+				m_srcRect = new Rect;
+				*m_srcRect = *(sprite.sourceRect);
+				
+				m_texture = sprite.texture;
+			}
+			else
+			{
+				m_srcRect = nullptr;
+				m_texture = nullptr;
+			}
 		}
 		
 		virtual ~RenderImageEvent() override

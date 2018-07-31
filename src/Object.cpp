@@ -28,7 +28,18 @@ namespace shooter
 	
 	
 	
-	
+	void Object::addEvent(Event* event)
+	{
+		if (m_associatedSpace)
+			m_associatedSpace->addEvent(event);
+	}
+
+	evnt::EventReturnType* Object::fireEventNow(Event* event)
+	{
+		if (m_associatedSpace != nullptr)
+			return m_associatedSpace->fireEventNow(event);
+		return nullptr;
+	}
 	
 	
 	

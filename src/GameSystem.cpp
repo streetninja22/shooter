@@ -16,10 +16,10 @@ namespace shooter
 {
 	
 	
-	class TestObject : public Object
+	class TestObject : public Enemy
 	{
 	public:
-		TestObject(Vector position, Vector size, Vector velocity = {0, 0}, Vector acceleration = {0, 0}, Worldspace* associatedSpace = nullptr, Behavior* behavior = nullptr) : Object(position, size, velocity, acceleration, associatedSpace, behavior)
+		TestObject(Vector position, Vector size, Vector velocity = {0, 0}, Vector acceleration = {0, 0}, Worldspace* associatedSpace = nullptr, Behavior* behavior = nullptr, Animation* animation = nullptr) : Enemy(position, size, velocity, acceleration, associatedSpace, behavior, animation)
 		{
 			
 		}
@@ -37,10 +37,17 @@ namespace shooter
 	{
 		Object* m_target;
 		
+		Animation* m_bulletAnimation;
+		
 	public:
-		TestBehavior(Object* parentObject) : Behavior(parentObject)
+		TestBehavior(Object* parentObject) : Behavior(parentObject), m_bulletAnimation(nullptr)
 		{
 			m_target = nullptr;
+		}
+		
+		TestBehavior() : Behavior(), m_target(nullptr), m_bulletAnimation(nullptr)
+		{
+			
 		}
 		
 		Object* findTarget()
@@ -75,6 +82,12 @@ namespace shooter
 		
 		virtual void stepBehavior(uint32_t timeStep) override
 		{
+			if (m_bulletAnimation == nullptr)
+			{
+				m_bulletAnimation = getAnimationFromEventReturn(m_parentObject->fireEventNow(new LoadAnimationEvent(ANIMATION_BULLET_SMALL)));
+				
+			}
+			
 			if (m_target == nullptr)
 			{
 				findTarget();
@@ -83,7 +96,7 @@ namespace shooter
 			
 			if (m_clock % 10 == 0)
 			{
-				m_parentObject->getAssociatedSpace()->add(new Bullet(m_parentObject->getCenter(), { 10, 10 }, findDirectionToTarget(), { 0, 0 }, m_parentObject->getAssociatedSpace(), nullptr));
+				m_parentObject->getAssociatedSpace()->add(new Bullet(m_parentObject->getCenter(), { 10, 10 }, findDirectionToTarget(), { 0, 0 }, m_parentObject->getAssociatedSpace(), nullptr, m_bulletAnimation));
 			}
 		}
 		
@@ -91,13 +104,18 @@ namespace shooter
 	
 	
 	
-	GameSystem::GameSystem(EventBus* bus) : System(bus), m_gameBus(new evnt::EventBus()), m_space(new Worldspace())
+	GameSystem::GameSystem(EventBus* bus) : System(bus), m_gameBus(new evnt::EventBus()), m_gfxManager(bus), m_space(new Worldspace(bus))
 	{
 		PlayerBehavior* player = new PlayerBehavior(nullptr, 6);
+		
+		Animation* playerAnim = getAnimationFromEventReturn(fireEventNow(new LoadAnimationEvent(AnimationId::ANIMATION_REIMU_IDLE)));
+		
+		Animation* enemyAnim = getAnimationFromEventReturn(fireEventNow(new LoadAnimationEvent(AnimationId::ANIMATION_FAIRY_IDLE)));
+		
 
-		m_space->add(new Player({ 128, 128 }, { 32, 32 }, { 0, 0 }, { 0, 0 }, m_space, player));
+		m_space->add(new Player({ 128, 128 }, { 32, 32 }, { 0, 0 }, { 0, 0 }, m_space, player, playerAnim));
 
-		m_space->add(new Enemy({ 28, 68 }, { 32, 32 }, { 0, 0 }, { 0, 0 }, m_space, new TestBehavior(nullptr)));
+		m_space->add(new Enemy({ 28, 68 }, { 32, 32 }, { 0, 0 }, { 0, 0 }, m_space, new TestBehavior(nullptr), enemyAnim));
 
 		m_player = player;
 
@@ -109,20 +127,7 @@ namespace shooter
 		{
 			std::cout << "Font loaded successfully\n";
 		}
-		
-		
-		//load sprites and animation
-		m_sprites = static_cast<gfx::LoadTextureReturnType*>(fireEventNow(new gfx::LoadTextureEvent(file::getResourceDirectory("/gfx/badwalkcycle.png"))))->getTexture();
-		
-		std::vector<AnimationFrame> track;
-		
-		track.push_back({{m_sprites, new gfx::Rect{0, 0, 128, 128}}, 0});
-		track.push_back({{m_sprites, new gfx::Rect{128, 0, 128, 128}}, 0});
-		track.push_back({{m_sprites, new gfx::Rect{0, 128, 128, 128}}, 0});
-		track.push_back({{m_sprites, new gfx::Rect{128, 128, 128, 128}}, 0});
-		
-		
-		m_animation = new Animation(track, 5);
+
 
 	}
 	
@@ -210,12 +215,9 @@ namespace shooter
 		addEvent(new gfx::RenderImageEvent(text->getTexture(), NULL, new gfx::Rect{ 480, 32, 128, 32 }));
 
 		
-		renderSpace(*m_space, m_eventBus);
+		//render
+		m_gfxManager.renderSpace(*m_space);
 		
-		
-		
-		//render animation test
-		addEvent(new gfx::RenderImageEvent(m_animation->getNextFrame(), new gfx::Rect{128, 128, 128, 128}));
 	}
 	
 	

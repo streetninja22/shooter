@@ -6,6 +6,7 @@
 #include "GameGraphics.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "gameevents.h"
 
 
 namespace shooter
@@ -23,10 +24,7 @@ namespace shooter
 
 		gfx::Font* m_mainFont;
 		
-		
-		gfx::Texture* m_sprites;
-		
-		Animation* m_animation;
+		GraphicsManager m_gfxManager;
 		
 	public:
 		GameSystem(EventBus* bus);
