@@ -1,7 +1,7 @@
 #include "GameGraphics.h"
 
 
-#define SPRITE_SCALE_FACTOR 1
+#define SPRITE_SCALE_FACTOR 2
 
 namespace shooter
 {
@@ -20,11 +20,11 @@ namespace shooter
 					
 					gfx::Rect* dstRect = new gfx::Rect();
 					
-					dstRect->x = object->getPosition().x;
-					dstRect->y = object->getPosition().y;
+					dstRect->x = object->getCenter().x - sprite.sourceRect->w / 2;
+					dstRect->y = object->getCenter().y - sprite.sourceRect->h / 2;
 					
-					dstRect->w = sprite.texture->getWidth() * SPRITE_SCALE_FACTOR;
-					dstRect->h = sprite.texture->getHeight() * SPRITE_SCALE_FACTOR;
+					dstRect->w = sprite.sourceRect->w * SPRITE_SCALE_FACTOR;
+					dstRect->h = sprite.sourceRect->h * SPRITE_SCALE_FACTOR;
 					
 					addEvent(new gfx::RenderImageEvent(object->getNextAnimationFrame(), dstRect));
 				}
