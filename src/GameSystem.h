@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "gameevents.h"
+#include "keybindings.h"
 
 
 namespace shooter
@@ -35,6 +36,8 @@ namespace shooter
 		}
 		
 		virtual EventReturnType* eventFired(Event* event) override;
+
+		void interpretKeyboardInput(inpt::KeyCode keycode, bool keyState);
 
 		void updateInput();
 		

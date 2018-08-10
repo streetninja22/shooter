@@ -128,9 +128,48 @@ namespace shooter
 			std::cout << "Font loaded successfully\n";
 		}
 
+		gfx::Texture* background = static_cast<gfx::LoadTextureReturnType*>(fireEventNow(new gfx::LoadTextureEvent(file::getResourceDirectory("/gfx/background.png"))))->getTexture();
 
+		m_gfxManager.setBackground(background);
 	}
 	
+	void GameSystem::interpretKeyboardInput(inpt::KeyCode keycode, bool keyState)
+	{
+		using namespace keybind;
+
+		switch (keycode)
+		{
+		case MOVE_LEFT:
+			m_player->setActionStatus(PlayerBehavior::ACTION_MOVE_LEFT, keyState);
+			break;
+
+		case MOVE_RIGHT:
+			m_player->setActionStatus(PlayerBehavior::ACTION_MOVE_RIGHT, keyState);
+			break;
+
+		case MOVE_UP:
+			m_player->setActionStatus(PlayerBehavior::ACTION_MOVE_FORWARD, keyState);
+			break;
+
+		case MOVE_DOWN:
+			m_player->setActionStatus(PlayerBehavior::ACTION_MOVE_BACKWARD, keyState);
+			break;
+
+		case PAUSE:
+		{
+			if (keyState == true)
+			{
+				if (m_running == true)
+					m_running = false;
+				else
+					m_running = true;
+			}
+
+			break;
+		}
+
+		}
+	}
 
 	//TODO: wtf this isn't what I meant to do, I need to fix this
 	EventReturnType* GameSystem::eventFired(Event* event)
@@ -138,6 +177,7 @@ namespace shooter
 		if (event->getEventType() == EventType::INPUT)
 		{
 			using namespace inpt;
+
 			inpt::InputEvent* inEvent = dynamic_cast<inpt::InputEvent*>(event);
 
 			if (inEvent->getInputType() == inpt::InputEventType::KEYBOARD)
@@ -151,37 +191,8 @@ namespace shooter
 				else
 					state = false;
 
-				switch (keyEvent->getKeyCode())
-				{
-				case KEYCODE_ARROW_LEFT:
-					m_player->setActionStatus(PlayerBehavior::ACTION_MOVE_LEFT, state);
-					break;
-
-				case KEYCODE_ARROW_RIGHT:
-					m_player->setActionStatus(PlayerBehavior::ACTION_MOVE_RIGHT, state);
-					break;
-
-				case KEYCODE_ARROW_UP:
-					m_player->setActionStatus(PlayerBehavior::ACTION_MOVE_FORWARD, state);
-					break;
-
-				case KEYCODE_ARROW_DOWN:
-					m_player->setActionStatus(PlayerBehavior::ACTION_MOVE_BACKWARD, state);
-					break;
-
-				case KEYCODE_SPACE:
-				{
-					if (state == true)
-					{
-						if (m_running == true)
-							m_running = false;
-						else
-							m_running = true;
-					}
-
-					break;
-				}
-				}
+				
+				interpretKeyboardInput(keyEvent->getKeyCode(), state);
 			}
 
 		}
@@ -205,17 +216,10 @@ namespace shooter
 		long start = getTicks();
 		if (m_running)
 			m_space->update();
-		
-		//show FPS and objects on field
-		std::stringstream textStream;
-		textStream << framerate << " : " << delay << "\n" << m_space->usedSize();
-
-		gfx::LoadTextureReturnType* text = static_cast<gfx::LoadTextureReturnType*>(fireEventNow(new gfx::LoadTextEvent(textStream.str(), m_mainFont, { 255, 255, 255, 255 })));
-
-		addEvent(new gfx::RenderImageEvent(text->getTexture(), NULL, new gfx::Rect{ 480, 32, 128, 32 }));
 
 		
-		//render
+		m_gfxManager.renderBackground();
+
 		m_gfxManager.renderSpace(*m_space);
 		
 	}

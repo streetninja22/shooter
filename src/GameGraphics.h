@@ -10,8 +10,6 @@
 
 namespace shooter
 {
-	
-	void renderSpace(Worldspace& space, EventBus* bus);
 
 	
 	
@@ -39,6 +37,16 @@ namespace shooter
 	{
 		gfx::Texture* m_spriteSheet;
 		
+		gfx::Texture* m_background;
+
+
+		int m_backgroundScroll = 0;
+
+		int m_backgroundHeight;
+
+		//get a proper way of finding or setting this later
+		int m_screenWidth = 620;
+		int m_screenHeight = 480;
 		
 	public:
 		GraphicsManager(evnt::EventBus* bus);
@@ -56,6 +64,10 @@ namespace shooter
 		EventReturnType* eventFired(Event* event) override;
 		
 		void renderSpace(Worldspace& space);
+
+		void renderBackground();
+
+		void setBackground(gfx::Texture* background);
 	};
 	
 	

@@ -119,6 +119,31 @@ namespace shooter
 		}
 		return nullptr;
 	}
+
+	void GraphicsManager::setBackground(gfx::Texture* background)
+	{
+		if (background != nullptr)
+		{
+			m_background = background;
+
+			m_backgroundHeight = background->getHeight();
+		}
+	}
+
+
+	void GraphicsManager::renderBackground()
+	{
+		int scrollHeight = m_backgroundHeight - m_screenHeight - m_backgroundScroll;
+
+		if (scrollHeight == 0)
+			m_backgroundScroll = 0;
+
+		gfx::Rect* sourceRect = new gfx::Rect{ 0, scrollHeight, m_screenWidth, m_screenHeight };
+
+		m_eventBus->addEvent(new gfx::RenderImageEvent(m_background, sourceRect, NULL));
+
+		++m_backgroundScroll;
+	}
 	
 	
 	
