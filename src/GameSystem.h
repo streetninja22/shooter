@@ -27,6 +27,8 @@ namespace shooter
 		
 		GraphicsManager m_gfxManager;
 		
+		gfx::Texture* m_fpsCounter;
+		
 	public:
 		GameSystem(EventBus* bus);
 		
@@ -39,9 +41,11 @@ namespace shooter
 
 		void interpretKeyboardInput(inpt::KeyCode keycode, bool keyState);
 
-		void updateInput();
+		void renderFpsCounter(double framerate);
 		
 		void update(double framerate, long delay);
+		
+		void updateGameState();
 		
 		
 	};

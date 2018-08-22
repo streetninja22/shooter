@@ -20,14 +20,35 @@ namespace shooter
 					
 					gfx::Rect* dstRect = new gfx::Rect();
 					
-					dstRect->x = object->getCenter().x - sprite.sourceRect->w / 2;
-					dstRect->y = object->getCenter().y - sprite.sourceRect->h / 2;
+					dstRect->x = object->getCenter().x - (sprite.sourceRect->w * SPRITE_SCALE_FACTOR) / 2;
+					dstRect->y = object->getCenter().y - (sprite.sourceRect->h * SPRITE_SCALE_FACTOR) / 2;
 					
 					dstRect->w = sprite.sourceRect->w * SPRITE_SCALE_FACTOR;
 					dstRect->h = sprite.sourceRect->h * SPRITE_SCALE_FACTOR;
 					
 					addEvent(new gfx::RenderImageEvent(object->getNextAnimationFrame(), dstRect));
 				}
+			}
+		}
+	}
+	
+	void GraphicsManager::renderHitboxes(Worldspace& space)
+	{
+		for (int index = 0; index < space.usedSize(); ++index)
+		{
+			if (space.at(index) != nullptr)
+			{
+				Object* object = space.at(index);
+				gfx::Rect dstRect;
+				
+				dstRect.x = object->getPosition().x;
+				dstRect.y = object->getPosition().y;
+				
+				dstRect.w = object->getSize().x;
+				dstRect.h = object->getSize().y;
+				
+				addEvent(new gfx::RenderDrawRectEvent(dstRect, {255, 255, 0, 0}));
+				
 			}
 		}
 	}
@@ -71,9 +92,9 @@ namespace shooter
 		{
 			case ANIMATION_REIMU_IDLE:
 			{
-				animTrack.push_back({{m_spriteSheet, new Rect {0, 0, 16, 16}}, 15});
-				animTrack.push_back({{m_spriteSheet, new Rect {16, 0, 16, 16}}, 15});
-				animTrack.push_back({{ m_spriteSheet, new Rect {32, 0, 16, 16}}, 15});
+				animTrack.push_back({{m_spriteSheet, new Rect {0, 0, 16, 16}}, 20});
+				animTrack.push_back({{m_spriteSheet, new Rect {16, 0, 16, 16}}, 20});
+				animTrack.push_back({{ m_spriteSheet, new Rect {32, 0, 16, 16}}, 20});
 				break;
 			}
 			case ANIMATION_FAIRY_IDLE:
@@ -129,6 +150,11 @@ namespace shooter
 			m_backgroundHeight = background->getHeight();
 		}
 	}
+	
+	void GraphicsManager::scrollBackground()
+	{
+		++m_backgroundScroll;
+	}
 
 
 	void GraphicsManager::renderBackground()
@@ -141,8 +167,6 @@ namespace shooter
 		gfx::Rect* sourceRect = new gfx::Rect{ 0, scrollHeight, m_screenWidth, m_screenHeight };
 
 		m_eventBus->addEvent(new gfx::RenderImageEvent(m_background, sourceRect, NULL));
-
-		++m_backgroundScroll;
 	}
 	
 	

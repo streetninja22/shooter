@@ -136,7 +136,7 @@ namespace gfx
 					
 			case GraphicsEventType::RENDER_FILL_RECT:
 				{
-					RenderDrawRectEvent* renderEvent = dynamic_cast<RenderDrawRectEvent*>(evnt);
+					RenderFillRectEvent* renderEvent = dynamic_cast<RenderFillRectEvent*>(evnt);
 					
 					renderFillRect(&renderEvent->getRect(), renderEvent->getColor());
 					

@@ -104,7 +104,7 @@ namespace shooter
 	
 	
 	
-	GameSystem::GameSystem(EventBus* bus) : System(bus), m_gameBus(new evnt::EventBus()), m_gfxManager(bus), m_space(new Worldspace(bus))
+	GameSystem::GameSystem(EventBus* bus) : System(bus), m_gameBus(new evnt::EventBus()), m_gfxManager(bus), m_space(new Worldspace(bus)), m_running(true), m_fpsCounter(nullptr)
 	{
 		PlayerBehavior* player = new PlayerBehavior(nullptr, 6);
 		
@@ -202,25 +202,42 @@ namespace shooter
 
 	}
 
-
-
-	void GameSystem::updateInput()
+	void GameSystem::renderFpsCounter(double framerate)
 	{
+		std::stringstream fpsText;
+		fpsText << framerate;
+		
+		if (m_fpsCounter != nullptr)
+			delete m_fpsCounter;
+		
+		gfx::Texture* m_fpsCounter = static_cast<gfx::LoadTextureReturnType*>(fireEventNow(new gfx::LoadTextEvent(fpsText.str(), m_mainFont, gfx::Color{255, 255, 255, 0})))->getTexture();
+		
+		gfx::Rect* textRect = new gfx::Rect{0, 0, 50, 30};
+		
+		addEvent(new gfx::RenderImageEvent(m_fpsCounter, NULL, textRect));
+	}
+	
+	void GameSystem::updateGameState()
+	{
+		m_space->update();
+		
+		m_gfxManager.scrollBackground();
 		
 	}
-
 
 	void GameSystem::update(double framerate, long delay)
 	{
 
-		long start = getTicks();
 		if (m_running)
-			m_space->update();
+			updateGameState();
 
 		
 		m_gfxManager.renderBackground();
 
 		m_gfxManager.renderSpace(*m_space);
+		//m_gfxManager.renderHitboxes(*m_space);
+		
+		renderFpsCounter(framerate);
 		
 	}
 	

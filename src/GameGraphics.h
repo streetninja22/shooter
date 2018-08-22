@@ -64,7 +64,11 @@ namespace shooter
 		EventReturnType* eventFired(Event* event) override;
 		
 		void renderSpace(Worldspace& space);
+		
+		void renderHitboxes(Worldspace& space);
 
+		void scrollBackground();
+		
 		void renderBackground();
 
 		void setBackground(gfx::Texture* background);
