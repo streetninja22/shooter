@@ -10,9 +10,28 @@ namespace shooter
 		{
 		case ObjectType::PLAYER:
 		{
-			collider->destroy();
+			dynamic_cast<Player*>(collider)->kill();
 		}
 		}
 	}
 
+	
+	void Enemy::dealDamage(int damage)
+	{
+		if (!m_invincible)
+		{
+			m_health -= damage;
+			
+			if (m_health <= 0)
+			{
+				kill();
+			}
+		}
+	}
+	
+	
+	void Enemy::kill()
+	{
+		destroy();
+	}
 }

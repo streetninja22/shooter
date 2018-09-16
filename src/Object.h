@@ -45,7 +45,8 @@ namespace shooter
 		Object(Vector position, Vector size, Vector velocity = {0, 0}, Vector acceleration = {0, 0}, Worldspace* associatedSpace = nullptr, Behavior* behavior = nullptr) : m_position(position), m_size(size), m_velocity(velocity), m_acceleration(acceleration), m_associatedSpace(associatedSpace), m_behavior(behavior)
 		{
 			if (m_behavior != nullptr)
-				m_behavior->changeParent(this);
+			{
+			}
 		}
 		
 		
@@ -62,6 +63,7 @@ namespace shooter
 		Vector getVelocity()								const { return m_velocity; }
 		Vector getAcceleration()							const { return m_acceleration; }
 		Worldspace* getAssociatedSpace()					const { return m_associatedSpace; }
+		Behavior* getMainBehavior()							const { return m_behavior; }
 
 		virtual ObjectType getObjectType()					const { return ObjectType::DEFAULT; }
 
@@ -73,6 +75,7 @@ namespace shooter
 		void setVelocity(Vector newVelocity)				{ m_velocity = newVelocity; }
 		void setAcceleration(Vector newAcceleration)		{ m_acceleration = newAcceleration; }
 		void changeAssociatedSpace(Worldspace* space)		{ m_associatedSpace = space; }
+		
 		
 		
 		//Tells if object is a VisibleObject or not. Overloaded in VisibleObject classs

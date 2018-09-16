@@ -40,9 +40,11 @@ namespace shooter
 	protected:
 
 		int m_health;
-
+		bool m_invincible;
+	
+		
 	public:
-		Enemy(Vector position, Vector size, Vector velocity, Vector acceleration, Worldspace* space, Behavior* behavior, Animation* animation) : VisibleObject(position, size, velocity, acceleration, space, behavior, animation)
+		Enemy(Vector position, Vector size, Vector velocity, Vector acceleration, Worldspace* space, Behavior* behavior, Animation* animation, int health = 100, bool invincible = false) : VisibleObject(position, size, velocity, acceleration, space, behavior, animation), m_health(health), m_invincible(invincible)
 		{
 		}
 
@@ -50,6 +52,10 @@ namespace shooter
 		{
 		}
 
-
+		void dealDamage(int damage);
+		
+		virtual void kill();
+		
+		virtual ObjectType getObjectType() const override {return ObjectType::ENEMY; }
 	};
 }

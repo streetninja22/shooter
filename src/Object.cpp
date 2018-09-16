@@ -13,7 +13,7 @@ namespace shooter
 	void Object::update()
 	{
 		if (m_behavior)
-			m_behavior->update();
+			m_behavior->update(this);
 		
 		move();
 	}
@@ -58,12 +58,15 @@ namespace shooter
 	
 	bool detectCollision(Object* a, Object* b)
 	{
-		if (checkCollision(a, b))
+		if (a != nullptr & b != nullptr)
 		{
-			a->onCollision(b);
-			b->onCollision(a);
-			return true;
+			if (checkCollision(a, b))
+			{
+				a->onCollision(b);
+				b->onCollision(a);
+				return true;
+			}
+			return false;
 		}
-		return false;
 	}
 }

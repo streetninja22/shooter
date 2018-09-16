@@ -13,16 +13,11 @@ namespace shooter
 	{
 	protected:
 		uint32_t m_clock;
-		Object* m_parentObject;
 		
 	public:
-		Behavior(Object* parentObject) : m_clock(0), m_parentObject(parentObject)
+		Behavior() : m_clock(0)
 		{
 			
-		}
-		
-		Behavior() : m_clock(0), m_parentObject(nullptr)
-		{
 		}
 		
 		virtual ~Behavior()
@@ -30,23 +25,23 @@ namespace shooter
 			
 		}
 		
-		virtual void stepBehavior(uint32_t timeStep)
+		virtual void stepBehavior(Object* parent, uint32_t timeStep)
 		{
 		}
 		
-		void update(uint32_t timeStep=1)
+		void resetClock()
+		{
+			m_clock = 0;
+		}
+		
+		void update(Object* parent, uint32_t timeStep=1)
 		{
 			m_clock += timeStep;
 			
-			stepBehavior(m_clock);
+			if (parent != nullptr)
+				stepBehavior(parent, m_clock);
 		}
 		
-		Object* getParent() { return m_parentObject; }
-		void changeParent(Object* parentObject)
-		{
-			m_parentObject = parentObject;
-			
-		}
 		
 	};
 

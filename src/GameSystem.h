@@ -8,6 +8,7 @@
 #include "Enemy.h"
 #include "gameevents.h"
 #include "keybindings.h"
+#include "enemies.h"
 
 
 namespace shooter

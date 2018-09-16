@@ -26,11 +26,16 @@ namespace shooter
 
 	void Player::destroy()
 	{
-		//std::cout << "Object destroyed!\n";
+		
+	}
+	
+	void Player::kill()
+	{
+		
 	}
 
 
-	void PlayerBehavior::stepBehavior(uint32_t timestep)
+	void PlayerBehavior::stepBehavior(Object* parent, uint32_t timestep)
 	{
 		Vector playerVel = { 0, 0 };
 
@@ -47,8 +52,15 @@ namespace shooter
 			playerVel.x = -m_moveSpeed;
 		else
 			playerVel.x = 0;
+		
+		if (getActionStatus(ACTION_SHOOT))
+		{
+			m_fireBehavior->update(parent);
+		}
+		else
+			m_fireBehavior->resetClock();
 
-		m_parentObject->setVelocity(playerVel);
+		parent->setVelocity(playerVel);
 	}
 
 	void PlayerBehavior::setActionStatus(PlayerAction action, bool state)
@@ -59,6 +71,61 @@ namespace shooter
 	bool PlayerBehavior::getActionStatus(PlayerAction action)
 	{
 		return m_currentActions[action];
+	}
+	
+	
+	
+	
+	
+	void PlayerShot::onCollision(Object* collider)
+	{
+		if (collider->getObjectType() == ObjectType::ENEMY)
+		{
+			Enemy* hitEnemy = dynamic_cast<Enemy*>(collider);
+			
+			hitEnemy->dealDamage(m_damage);
+			
+			destroy();
+		}
+	}
+	
+	
+	
+	
+	
+	ReimuFireBehavior::~ReimuFireBehavior()
+	{
+		delete m_basicBulletAnim;
+	}
+	
+	void ReimuFireBehavior::loadAnimation(Object* parent)
+	{
+		m_basicBulletAnim = getAnimationFromEventReturn(parent->fireEventNow(new LoadAnimationEvent(AnimationId::ANIMATION_BULLET_SMALL)));
+	}
+	
+	PlayerShot* ReimuFireBehavior::createBullet(Object* parent)
+	{
+		PlayerShot* shot;
+		
+		Vector position = parent->getCenter() - m_shotSize / 2;
+		
+		shot = new PlayerShot(m_basicBulletDamage, position, {m_shotSize, m_shotSize}, {0, m_bulletSpeed}, {0, 0}, nullptr, nullptr, m_basicBulletAnim);
+		
+		return shot;
+	}
+	
+	void ReimuFireBehavior::stepBehavior(Object* parent, uint32_t timestep)
+	{
+		
+		if (m_basicBulletAnim == nullptr)
+			loadAnimation(parent);
+		
+		if (!(m_clock % m_fireRate))
+		{
+			PlayerShot* shot = createBullet(parent);
+			
+			parent->getAssociatedSpace()->add(shot);
+		}
 	}
 
 }
