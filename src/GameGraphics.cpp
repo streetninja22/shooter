@@ -1,8 +1,6 @@
 #include "GameGraphics.h"
 
 
-#define SPRITE_SCALE_FACTOR 2
-
 namespace shooter
 {
 

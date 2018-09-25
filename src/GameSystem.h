@@ -31,7 +31,7 @@ namespace shooter
 		gfx::Texture* m_fpsCounter;
 		
 	public:
-		GameSystem(EventBus* bus);
+		GameSystem(EventBus* bus, Vector gamespaceSize);
 		
 		~GameSystem()
 		{

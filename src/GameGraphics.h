@@ -8,6 +8,9 @@
 #include "gameevents.h"
 #include "AnimationId.h"
 
+
+#define SPRITE_SCALE_FACTOR 2
+
 namespace shooter
 {
 

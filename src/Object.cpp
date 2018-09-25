@@ -58,12 +58,14 @@ namespace shooter
 	
 	bool detectCollision(Object* a, Object* b)
 	{
-		if (a != nullptr & b != nullptr)
+		if (a != nullptr && b != nullptr)
 		{
 			if (checkCollision(a, b))
 			{
 				a->onCollision(b);
-				b->onCollision(a);
+				
+				if (b != nullptr && a != nullptr)
+					b->onCollision(a);
 				return true;
 			}
 			return false;

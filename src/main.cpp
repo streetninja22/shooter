@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 	
 	inpt::InputSystem* inputSystem = new inpt::InputSystem(mainEventBus);
 	
-	shooter::GameSystem* gameSystem = new shooter::GameSystem(mainEventBus);
+	shooter::GameSystem* gameSystem = new shooter::GameSystem(mainEventBus, {SCREEN_WIDTH, SCREEN_HEIGHT});
 	
 	double currentFramerate = 60;
 	Uint32 currentDelay = 16;

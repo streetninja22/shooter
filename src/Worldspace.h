@@ -23,6 +23,13 @@ namespace shooter
 		 */
 		Object*& getValueAt(unsigned int index) { return m_space.at(index); }
 		
+		Vector m_boundarySize;
+		
+		//by how far an object much exceed the boundary to be deleted. Represented in percentage of the boundary size
+		double m_boundaryThreshold;
+		
+		bool m_enforcesBoundary;
+		
 	public:
 		/* Clear the worldspace of allocated objects
 		*/
@@ -48,6 +55,24 @@ namespace shooter
 		*/
 		void updateCollisions();
 		
+		/* Detects whether the object collides with the boundary on the X axis
+		*/
+		bool detectBoundaryCollisionX(Object* object, double threshold);
+		
+		/* Detects whether the object collides with the boundary on the Y axis
+		 */
+		bool detectBoundaryCollisionY(Object* object, double threshold);
+		
+		/* Detects whether the object collides with the boundary
+		*/
+		bool detectBoundaryCollision(Object* object, double threshold);
+		
+		/* Deals with objects outside of the Space's boundary
+		 @param object The object which is outside of the boundary
+		 @param originPos The position before the object collided with the boundary
+		*/
+		void enforceBoundary(Object* object, Vector originPos);
+		
 		/* Updates the state of each object and updates collisions
 		*/
 		void update();
@@ -68,7 +93,8 @@ namespace shooter
 		unsigned int find(Object* object);
 		
 		
-		Worldspace(EventBus* bus);
+		
+		Worldspace(EventBus* bus, bool enforcesBoundary = false, Vector boundarySize = {0, 0}, double boundaryThreshold = 1);
 		
 		
 		~Worldspace()

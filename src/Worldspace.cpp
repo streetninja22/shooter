@@ -4,7 +4,7 @@
 namespace shooter
 {
 	
-	Worldspace::Worldspace(EventBus* bus) : EventNode(bus), m_usedArrayLength(0), m_space(std::array<Object*, 1028>())
+	Worldspace::Worldspace(EventBus* bus, bool enforcesBoundary, Vector boundarySize, double boundaryThreshold) : EventNode(bus), m_usedArrayLength(0),  m_space(std::array<Object*, 1028>()), m_boundarySize(boundarySize), m_boundaryThreshold(boundaryThreshold), m_enforcesBoundary(enforcesBoundary)
 	{
 	}
 	
@@ -68,7 +68,14 @@ namespace shooter
 		for (int index = 0; index < m_usedArrayLength; ++index)
 		{
 			if (at(index) != nullptr)
+			{
+				Vector originPos = at(index)->getPosition();
+				
 				at(index)->update();
+				
+				if (m_enforcesBoundary)
+					enforceBoundary(at(index), originPos);
+			}
 		}
 	}
 	
@@ -81,6 +88,70 @@ namespace shooter
 			{
 				if (at(index1) != nullptr && at(index2) != nullptr)
 					detectCollision(at(index1), at(index2));
+			}
+		}
+	}
+	
+	
+	bool Worldspace::detectBoundaryCollisionX(Object* object, double threshold)
+	{
+		if (object != nullptr)
+		{
+			double thresholdSpaceX = m_boundarySize.x * threshold;
+			
+			if (object->getPosition().x < 0 - thresholdSpaceX || object->getPosition().x + object->getSize().x > m_boundarySize.x + thresholdSpaceX)
+				return true;
+		}
+		return false;
+	}
+	
+	bool Worldspace::detectBoundaryCollisionY(Object* object, double threshold)
+	{
+		if (object != nullptr)
+		{
+			double thresholdSpaceY = m_boundarySize.y * threshold;
+			
+			if (object->getPosition().y < 0 - thresholdSpaceY || object->getPosition().y + object->getSize().y > m_boundarySize.y + thresholdSpaceY)
+				return true;
+		}
+		return false;
+	}
+	
+	bool Worldspace::detectBoundaryCollision(Object* object, double threshold)
+	{
+		if (detectBoundaryCollisionX(object, threshold) || detectBoundaryCollisionY(object, threshold))
+			return true;
+		return false;
+	}
+	
+	void Worldspace::enforceBoundary(Object* object, Vector originPos)
+	{
+		//detect collision with boundary
+		if (detectBoundaryCollision(object, 0))
+		{
+			
+			switch(object->getObjectType())
+			{
+				case ObjectType::BULLET:
+				{
+					if (detectBoundaryCollision(object, m_boundaryThreshold))
+						object->destroy();
+					break;
+				}
+				case ObjectType::PLAYER:
+				{
+					//checks which side collision is with and only changes the axis it's colliding with
+					if (detectBoundaryCollisionX(object, 0))
+					{
+						object->setPositionX(originPos.x);
+					}
+					if (detectBoundaryCollisionY(object, 0))
+					{
+						object->setPositionY(originPos.y);
+					}
+					
+					break;
+				}
 			}
 		}
 	}

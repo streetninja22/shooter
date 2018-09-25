@@ -14,7 +14,7 @@
 
 namespace shooter
 {
-	GameSystem::GameSystem(EventBus* bus) : System(bus), m_gameBus(new evnt::EventBus()), m_gfxManager(bus), m_space(new Worldspace(bus)), m_running(true), m_fpsCounter(nullptr)
+	GameSystem::GameSystem(EventBus* bus, Vector gamespaceSize) : System(bus), m_gameBus(new evnt::EventBus()), m_gfxManager(bus), m_space(new Worldspace(bus, true, gamespaceSize, 0.5)), m_running(true), m_fpsCounter(nullptr)
 	{
 		Animation* playerAnim = getAnimationFromEventReturn(fireEventNow(new LoadAnimationEvent(AnimationId::ANIMATION_REIMU_IDLE)));
 		

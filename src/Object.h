@@ -71,6 +71,9 @@ namespace shooter
 		
 		
 		void setPosition(Vector newPosition)				{ m_position = newPosition; }
+		void setPositionX(double newX)						{ m_position.x = newX; }
+		void setPositionY(double newY)						{ m_position.y = newY; }
+		
 		void setSize(Vector newSize)						{ m_size = newSize; }
 		void setVelocity(Vector newVelocity)				{ m_velocity = newVelocity; }
 		void setAcceleration(Vector newAcceleration)		{ m_acceleration = newAcceleration; }
