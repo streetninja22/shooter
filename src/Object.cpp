@@ -34,6 +34,7 @@ namespace shooter
 			m_associatedSpace->addEvent(event);
 	}
 
+
 	evnt::EventReturnType* Object::fireEventNow(Event* event)
 	{
 		if (m_associatedSpace != nullptr)
@@ -41,6 +42,18 @@ namespace shooter
 		return nullptr;
 	}
 	
+
+	bool Object::exists()
+	{
+		//this checks if the Object exists by determining if the ObjectAllocationToken has been deallocated or not
+
+		if (m_allocationToken != nullptr)
+			return true;
+		return false;
+	}
+
+
+
 	
 	
 	bool checkCollision(const Object* a, const Object* b)
@@ -58,14 +71,24 @@ namespace shooter
 	
 	bool detectCollision(Object* a, Object* b)
 	{
-		if (a != nullptr && b != nullptr)
+		if (a->exists() && b->exists())
 		{
 			if (checkCollision(a, b))
 			{
 				a->onCollision(b);
 				
-				if (b != nullptr && a != nullptr)
-					b->onCollision(a);
+				if (b->exists() && a->exists())
+				{
+					try
+					{
+						b->onCollision(a);
+
+					}
+					catch (int n)
+					{
+
+					}
+				}
 				return true;
 			}
 			return false;

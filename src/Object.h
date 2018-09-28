@@ -19,6 +19,11 @@ namespace shooter
 	};
 
 
+	//only used to determine if an Object is allocated. An ObjectAllocationToken is allocated when the Object is created, and deleted with the Object
+	class ObjectAllocationToken
+	{
+
+	};
 
 
 	class Worldspace;
@@ -34,19 +39,19 @@ namespace shooter
 		Worldspace* m_associatedSpace;
 		
 		Behavior* m_behavior;
+
+		ObjectAllocationToken* m_allocationToken;
 		
 	public:
 		/*Create a blank object*/
 		Object()
 		{
-			
+			m_allocationToken = new ObjectAllocationToken();
 		}
 		
 		Object(Vector position, Vector size, Vector velocity = {0, 0}, Vector acceleration = {0, 0}, Worldspace* associatedSpace = nullptr, Behavior* behavior = nullptr) : m_position(position), m_size(size), m_velocity(velocity), m_acceleration(acceleration), m_associatedSpace(associatedSpace), m_behavior(behavior)
 		{
-			if (m_behavior != nullptr)
-			{
-			}
+			m_allocationToken = new ObjectAllocationToken();
 		}
 		
 		
@@ -54,6 +59,9 @@ namespace shooter
 		{
 			if (m_behavior != nullptr)
 				delete m_behavior;
+
+			delete m_allocationToken;
+			m_allocationToken = nullptr;
 		}
 		
 		
@@ -89,6 +97,11 @@ namespace shooter
 		virtual void onCollision(Object* collider)
 		{
 		}
+
+
+		/* Checks whether the object is null or not
+		*/
+		bool exists();
 
 		/* Destroy and delete this object
 		*/
