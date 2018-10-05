@@ -87,7 +87,7 @@ namespace shooter
 			for (int index2 = 0; index2 < index1; ++index2)
 			{
 				if (at(index1) != nullptr && at(index2) != nullptr)
-					detectCollision(at(index1), at(index2));
+					detectCollision(index1, index2);
 			}
 		}
 	}
@@ -153,6 +153,27 @@ namespace shooter
 					break;
 				}
 			}
+		}
+	}
+	
+	
+	bool Worldspace::detectCollision(int objectA, int objectB)
+	{
+		if (at(objectA) != nullptr && at(objectB) != nullptr)
+		{
+			Object* a = at(objectA);
+			Object* b = at(objectB);
+			if (checkCollision(a, b))
+			{
+				a->onCollision(b);
+				
+				if (at(objectA) != nullptr && at(objectB) != nullptr)
+				{
+					b->onCollision(a);
+				}
+				return true;
+			}
+			return false;
 		}
 	}
 	

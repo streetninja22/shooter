@@ -92,6 +92,12 @@ namespace shooter
 		 */
 		unsigned int find(Object* object);
 		
+		/* Check and resolve collision for two objects
+		 *
+		 * @param objectA The INDEX of the first object
+		 * @param objectB The INDEX of the second object
+		 */
+		bool detectCollision(int objectA, int objectB);
 		
 		
 		Worldspace(EventBus* bus, bool enforcesBoundary = false, Vector boundarySize = {0, 0}, double boundaryThreshold = 1);

@@ -42,18 +42,8 @@ namespace shooter
 		return nullptr;
 	}
 	
-
-	bool Object::exists()
-	{
-		//this checks if the Object exists by determining if the ObjectAllocationToken has been deallocated or not
-
-		if (m_allocationToken != nullptr)
-			return true;
-		return false;
-	}
-
-
-
+	
+	
 	
 	
 	bool checkCollision(const Object* a, const Object* b)
@@ -69,29 +59,4 @@ namespace shooter
 		return false;
 	}
 	
-	bool detectCollision(Object* a, Object* b)
-	{
-		if (a->exists() && b->exists())
-		{
-			if (checkCollision(a, b))
-			{
-				a->onCollision(b);
-				
-				if (b->exists() && a->exists())
-				{
-					try
-					{
-						b->onCollision(a);
-
-					}
-					catch (int n)
-					{
-
-					}
-				}
-				return true;
-			}
-			return false;
-		}
-	}
 }
